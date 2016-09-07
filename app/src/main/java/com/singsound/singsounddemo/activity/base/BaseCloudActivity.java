@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.singsound.singsounddemo.NetWorkChangeReceiver;
 import com.singsound.singsounddemo.utils.NetWorkUtils;
 import com.tt.SingEngine;
 
@@ -29,7 +30,7 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initContentView(savedInstanceState);
-
+        mProgressDialog = new ProgressDialog(this);
         //兼容6.0权限管理
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -62,8 +63,6 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
     ProgressDialog mProgressDialog;
 
     private void initEngine() {
-
-        mProgressDialog = new ProgressDialog(this);
         mProgressDialog.show();
 
         thread = new Thread() {
