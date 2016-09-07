@@ -17,9 +17,8 @@ import java.io.RandomAccessFile;
 /**
  * FIXME (441000, 1, 16) is the only format that is guaranteed to work on all
  * devices
- * 
- * @author 
- * 
+ *
+ * @author
  */
 public class AIRecorder {
 
@@ -31,9 +30,9 @@ public class AIRecorder {
     private static int INTERVAL = 200; // callback interval
 
     private Boolean bigEndian;
-    
+
     private Boolean fileHeader;
-    
+
     private static AIRecorder instance = null;
     private AudioRecord recorder = null;
     private AudioTrack player = null;
@@ -42,7 +41,7 @@ public class AIRecorder {
     private Thread thread = null; // recorder/player thread
     private String path = null; // wave file path
 
-    private volatile boolean running = false;
+    public volatile boolean running = false;
 
     public static interface Callback {
         public void run(byte[] data, int size);
@@ -53,11 +52,12 @@ public class AIRecorder {
             instance = new AIRecorder();
         return instance;
     }
-//    recorder.setOutputFormat
+
+    //    recorder.setOutputFormat
     private AIRecorder() {
 
-    	this.fileHeader = true;
-    	
+        this.fileHeader = true;
+
         int bufferSize = CHANNELS * FREQUENCY * BITS * INTERVAL / 1000 / 8;
         int minBufferSize = AudioRecord.getMinBufferSize(FREQUENCY, AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
@@ -79,9 +79,9 @@ public class AIRecorder {
         player.release();
         Log.d(TAG, "released");
     }
-    
+
     public void setFileheader(Boolean isheader) {
-    	this.fileHeader = isheader;
+        this.fileHeader = isheader;
     }
 
     public int start(final String path, final Callback callback, final int vadBacktime, final int vadFronttime) {
@@ -127,8 +127,8 @@ public class AIRecorder {
 
                     while (true) {
                         if (!running || recorder.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
-                        	recorder.stop(); // FIXME elapse 400ms
-                        	break;
+                            recorder.stop(); // FIXME elapse 400ms
+                            break;
                         }
 
                         int size = recorder.read(buffer, 0, buffer.length);
@@ -173,7 +173,7 @@ public class AIRecorder {
                         }
 
                         Log.d(TAG, "stoped");
-                        
+
                         if (file != null) {
                             fclose(file);
                         }
@@ -228,7 +228,7 @@ public class AIRecorder {
                 try {
                     file = new RandomAccessFile(path, "r");
                     if (fileHeader) {
-                        file.seek(44);	
+                        file.seek(44);
                     }
 
                     running = true;
@@ -281,14 +281,14 @@ public class AIRecorder {
     private RandomAccessFile fopen(String path) throws IOException {
         File f = new File(path);
 
-		if (f.exists()) {
-			f.delete();
-		} else {
-			File parentDir = f.getParentFile();
-			if (!parentDir.exists()) {
-				parentDir.mkdirs();
-			}
-		}
+        if (f.exists()) {
+            f.delete();
+        } else {
+            File parentDir = f.getParentFile();
+            if (!parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+        }
 
         RandomAccessFile file = new RandomAccessFile(f, "rw");
 
@@ -338,20 +338,20 @@ public class AIRecorder {
     }
 
     public double[] getDoubleArray(byte[] buf, int bitLength) {
-    	int lenByte = bitLength / 8;
+        int lenByte = bitLength / 8;
         int len = buf.length / lenByte;
         double[] out = new double[len];
         boolean isb = true;
-        
+
         for (int i = 0; i < len; i++) {
             double d = (double) byteArrayToShort(buf, 2 * i, isb) / 32768;
             out[i] = d;
         }
-       
+
         return out;
     }
 
-    
+
     private static short byteArrayToShort(byte[] bytes, int offset, boolean bigEndian) {
         int low, high;
         if (bigEndian) {

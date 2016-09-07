@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="titles">
-        <item>单词</item>
-        <item>句子</item>
-        <item>问答题</item>
-        <item>选择题</item>
-        <item>段落朗读</item>
-        <item>看图作文</item>
+    <string-array name="cloud_titles">
+        <item>单词跟读</item>
+        <item>句子跟读</item>
+        <item>模仿跟读</item>
+        <item>选择题测评</item>
+        <item>半开放题测评</item>
+        <item>口头作文测评</item>
+    </string-array>
+
+    <string-array name="native_titles">
+        <item>单词跟读</item>
+        <item>句子跟读</item>
     </string-array>
 
 </resources>

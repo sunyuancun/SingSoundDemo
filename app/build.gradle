@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.2.0'
     compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.bigkoo:convenientbanner:2.0.5'
 }

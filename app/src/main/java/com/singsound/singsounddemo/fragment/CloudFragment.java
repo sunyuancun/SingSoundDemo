@@ -6,17 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.singsound.singsounddemo.Config;
-import com.singsound.singsounddemo.GridViewAdapter;
+import com.singsound.singsounddemo.activity.Article_OnlineCloudActivity;
+import com.singsound.singsounddemo.activity.Choice_OnlineCloudActivity;
+import com.singsound.singsounddemo.activity.QuestionAnswer_OnlineCloudActivity;
+import com.singsound.singsounddemo.activity.Sentence_OnlineCloudActivity;
+import com.singsound.singsounddemo.adapter.GridViewAdapter;
 import com.singsound.singsounddemo.R;
-import com.singsound.singsounddemo.activity.WordActivity;
+import com.singsound.singsounddemo.activity.Word_OnlineCloudActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,18 +36,18 @@ public class CloudFragment extends Fragment {
     GridViewAdapter mAdapter;
 
     private static final String CLOUD = "CLOUD";
-    private String[] iconName;
 
     // 图片封装为一个数组
-    private int[] icon = {R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher};
+    private int[] icon = {R.mipmap.word,
+            R.mipmap.sentence,
+            R.mipmap.mofang,
+            R.mipmap.xuanze,
+            R.mipmap.bankaifang,
+            R.mipmap.article};
+    //title
+    private String[] iconName = {"单词跟读", "句子跟读", "模仿跟读", "选择题测评", "问答题测评", "口头作文测评"};
 
     private List<Map<String, Object>> data_list = new ArrayList<>();
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,71 +73,45 @@ public class CloudFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Map map_position = (Map) gview.getAdapter().getItem(i);
-                String type = (String) map_position.get("type");
-                Log.e("-------题型------", i + "-----" + type);
 
                 switch (i) {
                     case 0:
-                        startActivity(getActivity(), WordActivity.class, type);
+                        startActivity(getActivity(), Word_OnlineCloudActivity.class, iconName[0]);
                         break;
                     case 1:
-                        startActivity(getActivity(), WordActivity.class, type);
+                        startActivity(getActivity(), Sentence_OnlineCloudActivity.class, iconName[1]);
                         break;
                     case 2:
-                        startActivity(getActivity(), WordActivity.class, type);
+                        Toast.makeText(getActivity(), "正在开发...", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        startActivity(getActivity(), WordActivity.class, type);
+                        startActivity(getActivity(), Choice_OnlineCloudActivity.class, iconName[3]);
                         break;
                     case 4:
-                        startActivity(getActivity(), WordActivity.class, type);
+                        startActivity(getActivity(), QuestionAnswer_OnlineCloudActivity.class, iconName[4]);
                         break;
                     case 5:
-                        startActivity(getActivity(), WordActivity.class, type);
+                        startActivity(getActivity(), Article_OnlineCloudActivity.class, iconName[5]);
                         break;
                 }
             }
         });
     }
 
-
     private void initdata() {
-        iconName = this.getResources().getStringArray(R.array.titles);
         //cion和iconName的长度是相同的，这里任选其一都可以
         for (int i = 0; i < icon.length; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("image", icon[i]);
             map.put("text", iconName[i]);
-            switch (i) {
-                case 0:
-                    map.put("type", Config.TYPE_Word);
-                    break;
-                case 1:
-                    map.put("type", Config.TYPE_sent);
-                    break;
-                case 2:
-                    map.put("type", Config.TYPE_Question_answer);
-                    break;
-                case 3:
-                    map.put("type", Config.TYPE_choc);
-                    break;
-                case 4:
-                    map.put("type", Config.TYPE_Paragraph);
-                    break;
-                case 5:
-                    map.put("type", Config.TYPE_pic_article);
-                    break;
-
-
-            }
             data_list.add(map);
         }
 
     }
 
-    public void startActivity(Activity from, Class<?> to, String type) {
+    public void startActivity(Activity from, Class<?> to, String title) {
         Intent intent = new Intent();
-        intent.putExtra("TYPE", type);
+        intent.putExtra("TITLE", title);
         intent.setClass(from, to);
         from.startActivity(intent);
     }

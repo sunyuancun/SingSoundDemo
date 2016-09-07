@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.singsound.singsounddemo.utils.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <!--<include layout="@layout/titlebar" />-->
+
     <FrameLayout
         android:id="@+id/layFrame"
         android:layout_width="match_parent"

@@ -35,8 +35,8 @@ public class SingEngine {
         /**
          * 结束时回调
          *
-         * @param Code  错误代码，等于0时为正常结束
-         * @param msg   错误消息
+         * @param Code 错误代码，等于0时为正常结束
+         * @param msg  错误消息
          */
         public abstract void onEnd(int Code, String msg);
 
@@ -80,12 +80,13 @@ public class SingEngine {
         public void setValue(String value) {
             this.value = value;
         }
-    };
+    }
+
+    ;
 
     public enum coreType {
         enWord("en.word.score"),
-        enSent("en.sent.score")
-        ;
+        enSent("en.sent.score");
 
         private String value;
 
@@ -100,7 +101,9 @@ public class SingEngine {
         public void setValue(String value) {
             this.value = value;
         }
-    };
+    }
+
+    ;
 
 
     private Context ct;
@@ -152,11 +155,17 @@ public class SingEngine {
         }
     }
 
-    public String getVersion() { return "0.1.0";}
+    public String getVersion() {
+        return "0.1.0";
+    }
+
     public String getWavPath() {
         return wavPath;
     }
-    public void wavWithOutHeader(Boolean isheader) { recorder.setFileheader(isheader); }
+
+    public void wavWithOutHeader(Boolean isheader) {
+        recorder.setFileheader(isheader);
+    }
 
     public void setServerType(coreProvideType type) {
         cpt = type;
@@ -293,7 +302,7 @@ public class SingEngine {
 
     public void start() {
         byte[] rid = new byte[64];
-        if (SSoundStart(rid) != 0) return ;
+        if (SSoundStart(rid) != 0) return;
         int r;
         wavPath = AiUtil.getFilesDir(
                 ct.getApplicationContext()).getPath()
@@ -308,7 +317,7 @@ public class SingEngine {
                     }
                     double mean = v / (double) size;
                     double volume = 100 * Math.log10(mean);
-                    caller.onUpdateVolume((int)volume);
+                    caller.onUpdateVolume((int) volume);
                     caller.onRecordingBuffer(data);
                     int rr = SSound.ssound_feed(engine, data, size);
                     if (rr != 0) {
@@ -327,15 +336,15 @@ public class SingEngine {
         caller.onBegin();
     }
 
-    public void startWithPCM(String wavName){
+    public void startWithPCM(String wavName) {
         byte[] rid = new byte[64];
-        if (SSoundStart(rid) != 0) return ;
-        int bytes,rv;
+        if (SSoundStart(rid) != 0) return;
+        int bytes, rv;
         byte[] buf = new byte[1024];
 
         InputStream fis;
         try {
-            fis =  ct.getAssets().open(wavName);
+            fis = ct.getAssets().open(wavName);
             while ((bytes = fis.read(buf, 0, 1024)) > 0) {
                 if ((rv = SSound.ssound_feed(engine, buf, bytes)) != 0) {
                     break;
@@ -351,6 +360,7 @@ public class SingEngine {
         stop();
 
     }
+
     public static File externalFilesDir(Context c) {
         File f = c.getExternalFilesDir(null);
         // not support android 2.1
@@ -384,7 +394,14 @@ public class SingEngine {
     }
 
     public void playback() {
-        recorder.playback();
+
+        if (recorder.running) {
+            recorder.stop();
+        } else {
+            recorder.playback();
+        }
+//        recorder.playback();
     }
+
 
 }

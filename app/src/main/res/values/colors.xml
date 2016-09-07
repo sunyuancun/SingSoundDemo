@@ -3,6 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#30809f</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="orange">#ff0000</color>
+    <color name="orange">#3bb2d7</color>
     <color name="background">#ffffff</color>
+    <color name="black">#30809f</color>
+    <color name="yellow">#22ffee00</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
 </resources>
