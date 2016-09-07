@@ -3,6 +3,7 @@ package com.singsound.singsounddemo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.singsound.singsounddemo.utils.NetWorkUtils;
@@ -17,6 +18,7 @@ public class NetWorkChangeReceiver extends BroadcastReceiver {
             Toast.makeText(context, "网络连接成功", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "检查网络连接", Toast.LENGTH_SHORT).show();
+            Log.e("-------------","sss");
         }
     }
 
