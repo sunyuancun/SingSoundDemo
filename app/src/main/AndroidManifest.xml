@@ -34,6 +34,14 @@
         <activity android:name=".activity.Choice_OnlineCloudActivity" />
         <activity android:name=".activity.Article_OnlineCloudActivity" />
         <activity android:name=".activity.QuestionAnswer_OnlineCloudActivity"></activity>
+
+        <receiver android:name=".NetWorkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+
+        </receiver>
+
     </application>
 
 </manifest>
