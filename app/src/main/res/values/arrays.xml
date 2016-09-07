@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="titles">
+        <item>单词</item>
+        <item>句子</item>
+        <item>问答题</item>
+        <item>选择题</item>
+        <item>段落朗读</item>
+        <item>看图作文</item>
+    </string-array>
+
+</resources>
