@@ -20,7 +20,7 @@ public class AboutActivity extends AppCompatActivity {
 
     private void initTitle() {
 
-        TitleBarUtil.initTitle(this,getString(R.string.about));
+        TitleBarUtil.initTitle( this,getString(R.string.about));
 
     }
 }
