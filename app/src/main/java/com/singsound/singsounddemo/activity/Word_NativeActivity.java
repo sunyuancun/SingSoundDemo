@@ -47,16 +47,17 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_recoding);
                 start();
                 mRecoderUtils.startRecord();
                 mRecoderDialog.showAtLocation(view, Gravity.CENTER, 0, 0);
-                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_recoding);
                 return true;
+
             case MotionEvent.ACTION_UP:
+                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
                 stop();
                 mRecoderUtils.stopRecord();
                 mRecoderDialog.dismiss();
-                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
                 return true;
         }
         return false;

@@ -17,7 +17,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,15 +27,31 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.base.BaseCloudActivity" />
-        <activity android:name=".activity.Word_OnlineCloudActivity" />
-        <activity android:name=".activity.AboutActivity" />
+        <activity
+            android:name=".activity.Word_OnlineCloudActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.base.BaseNativeActivity" />
-        <activity android:name=".activity.Sentence_OnlineCloudActivity" />
-        <activity android:name=".activity.Word_NativeActivity" />
-        <activity android:name=".activity.Sentence_NativeActivity" />
-        <activity android:name=".activity.Choice_OnlineCloudActivity" />
-        <activity android:name=".activity.Article_OnlineCloudActivity" />
-        <activity android:name=".activity.QuestionAnswer_OnlineCloudActivity"></activity>
+        <activity
+            android:name=".activity.Sentence_OnlineCloudActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Word_NativeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Sentence_NativeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Choice_OnlineCloudActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Article_OnlineCloudActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.QuestionAnswer_OnlineCloudActivity"
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".NetWorkChangeReceiver">
             <intent-filter>
