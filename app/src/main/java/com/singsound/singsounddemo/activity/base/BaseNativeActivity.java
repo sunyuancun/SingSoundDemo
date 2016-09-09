@@ -172,5 +172,4 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
             mProgressDialog.dismiss();
         }
     }
-
 }

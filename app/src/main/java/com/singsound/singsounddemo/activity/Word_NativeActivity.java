@@ -43,21 +43,26 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
     private AudioRecoderDialog mRecoderDialog;
     private AudioRecoderUtils mRecoderUtils;
 
+
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
+
+                Log.d("-----------------", "DOWN");
                 button_word.setBackgroundResource(R.drawable.shape_recoder_btn_recoding);
-                start();
                 mRecoderUtils.startRecord();
                 mRecoderDialog.showAtLocation(view, Gravity.CENTER, 0, 0);
+                start();
                 return true;
 
             case MotionEvent.ACTION_UP:
+
+                Log.d("-----------------", "UP");
                 button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
-                stop();
                 mRecoderUtils.stopRecord();
                 mRecoderDialog.dismiss();
+                stop();
                 return true;
         }
         return false;
@@ -82,6 +87,7 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
         initTitle();
         initUI();
     }
+
 
     private void initTitle() {
         TitleBarUtil.initTitle(this, getIntent().getStringExtra("TITLE"));
