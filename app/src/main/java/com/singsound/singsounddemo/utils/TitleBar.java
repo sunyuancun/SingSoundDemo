@@ -476,4 +476,5 @@ public class TitleBar extends ViewGroup implements View.OnClickListener {
         }
     }
 
+
 }
