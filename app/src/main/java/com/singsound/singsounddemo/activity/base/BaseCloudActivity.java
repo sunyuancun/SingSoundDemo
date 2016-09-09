@@ -4,15 +4,19 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.singsound.singsounddemo.NetWorkChangeReceiver;
 import com.singsound.singsounddemo.utils.NetWorkUtils;
+import com.singsound.singsounddemo.utils.StateColorUtils;
 import com.tt.SingEngine;
 
 import org.json.JSONObject;
@@ -29,6 +33,7 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StateColorUtils.initStateColor(this);
         initContentView(savedInstanceState);
         mProgressDialog = new ProgressDialog(this);
         //兼容6.0权限管理

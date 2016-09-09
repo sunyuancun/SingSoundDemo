@@ -12,7 +12,9 @@ import com.singsound.singsounddemo.R;
 public class TitleBarUtil {
 
     public static void initTitle(final Activity activity, String title) {
+
         final TitleBar titleBar = (TitleBar) activity.findViewById(R.id.title_bar);
+        titleBar.setImmersive(true);
         titleBar.setBackgroundColor(Color.parseColor("#30809f"));
         titleBar.setLeftTextColor(Color.WHITE);
         titleBar.setLeftImageResource(R.mipmap.back_arrow);

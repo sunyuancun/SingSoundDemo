@@ -14,6 +14,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.singsound.singsounddemo.R;
 import com.singsound.singsounddemo.fragment.CloudFragment;
 import com.singsound.singsounddemo.fragment.NativeFragment;
+import com.singsound.singsounddemo.utils.StateColorUtils;
 import com.singsound.singsounddemo.utils.TitleBar;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StateColorUtils.initStateColor(this);
         setContentView(R.layout.activity_main1);
         initTitle();
         initUI();
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
     private void initTitle() {
         final TitleBar titleBar = (TitleBar) findViewById(R.id.title_bar);
+        titleBar.setImmersive(true);
         titleBar.setBackgroundColor(Color.parseColor("#30809f"));
         titleBar.setLeftTextColor(Color.WHITE);
         titleBar.setLeftClickListener(new View.OnClickListener() {
