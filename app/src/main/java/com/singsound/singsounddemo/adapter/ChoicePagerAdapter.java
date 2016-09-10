@@ -138,7 +138,7 @@ public class ChoicePagerAdapter extends PagerAdapter implements Choice_OnlineClo
                     answer_D.setText("D : " + answers.get(i).getText());
                     if (answers.get(i).getRight()) {
                         if (rightOrNot) {
-                            answer_D.setTextColor(Color.parseColor("#3bb2d7"));
+                            answer_D.setTextColor(Color.parseColor("#239a13"));
                         } else {
                             answer_D.setTextColor(Color.parseColor("#FF4081"));
                         }
