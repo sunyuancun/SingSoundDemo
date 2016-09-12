@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -16,12 +18,18 @@ import com.singsound.singsounddemo.fragment.CloudFragment;
 import com.singsound.singsounddemo.fragment.NativeFragment;
 import com.singsound.singsounddemo.utils.StateColorUtils;
 import com.singsound.singsounddemo.utils.TitleBar;
+import com.singsound.singsounddemo.utils.tabview.TabView;
+import com.singsound.singsounddemo.utils.tabview.TabViewChild;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Fragment> fragments;
+    CloudFragment cloudFragment;
+    NativeFragment nativeFragment;
+    TabView tabView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         setContentView(R.layout.activity_main1);
         initTitle();
         initUI();
+    }
+
+    private void initFragments() {
+        cloudFragment = new CloudFragment();
+        nativeFragment = new NativeFragment();
     }
 
     private void initTitle() {
@@ -60,77 +73,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     }
 
     private void initUI() {
-        BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
-        bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
-        bottomNavigationBar
-                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC
-                );
-        bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.online_unselected, getResources().getString(R.string.online)).setActiveColorResource(R.color.orange))
-                .addItem(new BottomNavigationItem(R.mipmap.offine_unselected, getResources().getString(R.string.offine)).setActiveColorResource(R.color.orange))
-                .setFirstSelectedPosition(0)
-                .initialise();
-        bottomNavigationBar.setTabSelectedListener(this);
-        fragments = getFragments();
-        setDefaultFragment();
-    }
-
-    /**
-     * 设置默认的
-     */
-    private void setDefaultFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.add(R.id.layFrame, cloudFragment);
-        transaction.add(R.id.layFrame, nativeFragment);
-        transaction.show(cloudFragment);
-        transaction.hide(nativeFragment);
-        transaction.commit();
-
-    }
-
-    CloudFragment cloudFragment;
-    NativeFragment nativeFragment;
-
-    private ArrayList<Fragment> getFragments() {
-        ArrayList<Fragment> fragments = new ArrayList<>();
-        cloudFragment = new CloudFragment();
-        nativeFragment = new NativeFragment();
-        fragments.add(cloudFragment);
-        fragments.add(nativeFragment);
-        return fragments;
-    }
-
-    @Override
-    public void onTabSelected(int position) {
-        if (fragments != null) {
-            if (position < fragments.size()) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                Fragment fragment = fragments.get(position);
-                if (!fragment.isVisible()) {
-                    ft.show(fragment);
-                } else {
-                    return;
-                }
-                ft.commitAllowingStateLoss();
+        initFragments();
+        tabView = (TabView) findViewById(R.id.tabView);
+        tabView.setTabViewHeight(dip2px(52));
+        //start add data
+        List<TabViewChild> tabViewChildList = new ArrayList<>();
+        TabViewChild tabViewChild01 = new TabViewChild(R.mipmap.online_unselected, R.mipmap.online_selected, "在线测评", cloudFragment);
+        TabViewChild tabViewChild02 = new TabViewChild(R.mipmap.offine_unselected, R.mipmap.offine_selected, "离线测评", nativeFragment);
+        tabViewChildList.add(tabViewChild01);
+        tabViewChildList.add(tabViewChild02);
+        tabView.setTabViewChild(tabViewChildList, getSupportFragmentManager());
+        tabView.setTabViewDefaultPosition(0);
+        tabView.setOnTabChildClickListener(new TabView.OnTabChildClickListener() {
+            @Override
+            public void onTabChildClick(int position, ImageView currentImageIcon, TextView currentTextView) {
+                tabView.setTabViewDefaultPosition(position);
             }
-        }
+        });
     }
 
-    @Override
-    public void onTabUnselected(int position) {
-        if (fragments != null) {
-            if (position < fragments.size()) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                Fragment fragment = fragments.get(position);
-                ft.hide(fragment);
-                ft.commitAllowingStateLoss();
-            }
-        }
+    public  int dip2px(float dpValue)
+    {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
-    @Override
-    public void onTabReselected(int position) {
-    }
 }
