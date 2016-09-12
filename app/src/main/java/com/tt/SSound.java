@@ -1,6 +1,7 @@
 package com.tt;
 
 import android.app.Activity;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ public final class SSound {
     public static JSONObject resultjson;
     private static String servertype = "cloud";
     //    private static String cloudServer = "ws://api.cloud.ssapi.cn:8080";
-    private static String cloudServer = "120.92.133.98";
+    private static String cloudServer = "ws://120.92.133.98:8090"; //测试服务器
 
     private static String appkey = "1459219202000001";   //测试环境
     private static String secretkey = "3bc23f814868ebd5b61a71acde532abb";
@@ -100,9 +101,10 @@ public final class SSound {
 
     /**
      * 离线评测一个音频（目前仅支持16k 16bit单通道mp3文件）
+     *
      * @param engine 引擎对象值
-     * @param data 数据
-     * @param size 数据大小(音频总尺寸)
+     * @param data   数据
+     * @param size   数据大小(音频总尺寸)
      * @return 返回值
      */
     public static native int ssound_offline(long engine, byte[] data, int size);
@@ -137,6 +139,7 @@ public final class SSound {
     public static native int ssound_get_device_id(byte[] device_id, Object androidContext);
 
     public static long ssound_init(Activity active) {
+
         JSONObject cfg = new JSONObject();
         try {
             cfg.put("prof", new JSONObject("{\"enable\": 1,\"output\":\"\"}"));
