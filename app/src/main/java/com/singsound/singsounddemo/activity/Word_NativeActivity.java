@@ -44,15 +44,14 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
     private AudioRecoderDialog mRecoderDialog;
     private AudioRecoderUtils mRecoderUtils;
 
-    Drawable btn_normal;
-    Drawable btn_recoding;
+
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("-----------------", "DOWN");
-                button_word.setBackgroundDrawable(btn_recoding);
+                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_recoding);
                 mRecoderUtils.startRecord();
                 mRecoderDialog.showAtLocation(view, Gravity.CENTER, 0, 0);
                 start();
@@ -61,7 +60,7 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
             case MotionEvent.ACTION_UP:
 
                 Log.d("-----------------", "UP");
-                button_word.setBackgroundDrawable(btn_normal);
+                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
                 mRecoderUtils.stopRecord();
                 mRecoderDialog.dismiss();
                 stop();
@@ -100,10 +99,6 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
 
         mRecoderDialog = new AudioRecoderDialog(this);
         mRecoderDialog.setShowAlpha(0.98f);
-
-        btn_normal = getResources().getDrawable(R.drawable.shape_recoder_btn_normal);
-        btn_recoding = getResources().getDrawable(R.drawable.shape_recoder_btn_recoding);
-
 
         result_view = (RelativeLayout) findViewById(R.id.result_view);
         button_word = (Button) findViewById(R.id.bt_word);

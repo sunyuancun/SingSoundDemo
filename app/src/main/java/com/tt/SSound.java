@@ -99,6 +99,15 @@ public final class SSound {
     public static native int ssound_feed(long engine, byte[] data, int size);
 
     /**
+     * 离线评测一个音频（目前仅支持16k 16bit单通道mp3文件）
+     * @param engine 引擎对象值
+     * @param data 数据
+     * @param size 数据大小(音频总尺寸)
+     * @return 返回值
+     */
+    public static native int ssound_offline(long engine, byte[] data, int size);
+
+    /**
      * 停止引擎
      *
      * @param engine 引擎对象值

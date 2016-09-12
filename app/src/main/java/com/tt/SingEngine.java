@@ -336,6 +336,11 @@ public class SingEngine {
         caller.onBegin();
     }
 
+    /**
+     * 离线WAV
+     *
+     * @param wavName
+     */
     public void startWithPCM(String wavName) {
         byte[] rid = new byte[64];
         if (SSoundStart(rid) != 0) return;
@@ -351,6 +356,32 @@ public class SingEngine {
                 }
             }
 
+            fis.close();
+        } catch (IOException e) {
+            caller.onEnd(70011, "feed audio data fail");
+        } finally {
+        }
+
+        stop();
+
+    }
+
+    /**
+     * 离线 MP3 文件评测
+     *
+     * @param MP3Name
+     */
+    public void startWithLocalMP3(String MP3Name) {
+        byte[] rid = new byte[64];
+        if (SSoundStart(rid) != 0) return;
+
+        InputStream fis;
+        try {
+            fis = ct.getAssets().open(MP3Name);
+            int length = fis.available();
+            byte[] buf_mp3 = new byte[length];
+            fis.read(buf_mp3, 0, length);
+            SSound.ssound_offline(engine, buf_mp3, length);
             fis.close();
         } catch (IOException e) {
             caller.onEnd(70011, "feed audio data fail");
