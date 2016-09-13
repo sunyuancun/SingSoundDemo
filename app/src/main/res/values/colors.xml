@@ -8,4 +8,5 @@
     <color name="black">#30809f</color>
     <color name="yellow">#22ffee00</color>
     <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="background_viewpager_item_word">#3d3d3d</color>
 </resources>

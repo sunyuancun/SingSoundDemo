@@ -3,41 +3,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/position"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="o"
         android:textSize="20sp" />
 
-
-    <TextView
-        android:id="@+id/question_title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/viewpager_item_background"
         android:gravity="center"
-        android:text="title" />
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
 
-    <TextView
-        android:id="@+id/answer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="answer"
-        android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/question_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="title" />
+
+        <TextView
+            android:id="@+id/answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="answer"
+            android:visibility="gone" />
+    </LinearLayout>
     <!--<TextView-->
-        <!--android:id="@+id/result_tv"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:gravity="center"-->
-        <!--android:text="result" />-->
+    <!--android:id="@+id/result_tv"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="result" />-->
 
 </LinearLayout>

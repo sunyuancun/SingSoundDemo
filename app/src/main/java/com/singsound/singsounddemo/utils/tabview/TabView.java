@@ -148,9 +148,7 @@ public class TabView extends RelativeLayout {
 
         TextView textView_line = new TextView(context);
         textView_line.setId(R.id.tabview_textview);
-        //这里的Textview的父layout是ListView，所以要用ListView.LayoutParams
-//        textView_line.setWidth(TabViewUtil.dp2px(context, 300));
-//        textView_line.setHeight(TabViewUtil.dp2px(context, 1));
+
         LayoutParams textViewParams = new LayoutParams(RMP, TabViewUtil.dp2px(context, 1));
         textView_line.setLayoutParams(textViewParams);
         textView_line.setBackgroundColor(Color.parseColor("#3bb2d7"));
