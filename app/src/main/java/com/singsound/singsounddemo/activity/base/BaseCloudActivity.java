@@ -4,17 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.singsound.singsounddemo.NetWorkChangeReceiver;
 import com.singsound.singsounddemo.utils.NetWorkUtils;
 import com.singsound.singsounddemo.utils.StateColorUtils;
 import com.tt.SingEngine;
