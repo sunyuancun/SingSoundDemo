@@ -268,6 +268,9 @@ public class SingEngine {
     }
 
     public int SSoundStart(byte[] rid) {
+
+        ChooseServerType_If_AutoType();
+
         int r = SSound.ssound_start(engine, startCfg.toString(), rid, new SSound.ssound_callback() {
             @Override
             public int run(byte[] id, int type, byte[] data, int size) {
@@ -290,6 +293,24 @@ public class SingEngine {
         }
 
         return r;
+    }
+
+    private void ChooseServerType_If_AutoType() {
+        try {
+            if (cpt != coreProvideType.AUTO) {
+                return;
+            }
+
+            if (!NetWorkUtil.getInstance().isConnected(ct))
+                startCfg.put("coreProvideType", coreProvideType.NATIVE.getValue());
+
+            else
+                startCfg.put("coreProvideType", coreProvideType.CLOUD.getValue());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        log("------------------" + startCfg.optString("coreProvideType"));
     }
 
     public int SSoundFeed(byte[] data, int size) {
@@ -432,6 +453,11 @@ public class SingEngine {
             recorder.playback();
         }
 //        recorder.playback();
+    }
+
+
+    public void log(String s) {
+        Log.e("SingEngine", s);
     }
 
 

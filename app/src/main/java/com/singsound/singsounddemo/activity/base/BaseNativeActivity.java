@@ -10,11 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
+
 import android.widget.Toast;
 
-import com.singsound.singsounddemo.utils.NetWorkUtils;
 import com.singsound.singsounddemo.utils.StateColorUtils;
 import com.tt.SingEngine;
 
@@ -74,7 +72,7 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
                 try {
                     // 1 获取引擎实例
                     engine = SingEngine.newInstance(BaseNativeActivity.this, BaseNativeActivity.this, null);
-                    // 2. 设置引擎类型
+                    // 2. 设置引擎类型  cloud ：云端    native： 离线     auto： 云端优先，无网络状态native
                     engine.setServerType("native");
                     // 3 构建引擎初始化参数
                     JSONObject cfg_init = engine.buildInitJson();
@@ -93,7 +91,6 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
     @Override
     protected void onResume() {
         super.onResume();
-//        checkNetWork();
     }
 
     @Override
@@ -116,12 +113,6 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
             engine.cancel();
             engine.delete();
             Log.e("-----------", "engine cancel  and delete");
-        }
-    }
-
-    private void checkNetWork() {
-        if (!NetWorkUtils.getInstance().isConnected(this)) {
-            Toast.makeText(this, "检查网络连接", Toast.LENGTH_SHORT).show();
         }
     }
 

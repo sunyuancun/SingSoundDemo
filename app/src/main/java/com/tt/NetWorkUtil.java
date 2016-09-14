@@ -1,24 +1,26 @@
-package com.singsound.singsounddemo.utils;
+package com.tt;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by wang on 2016/8/25.
+ * util for network state
+ *
+ * Created by syc on 2016/8/25.
  */
-public class NetWorkUtils {
-    private static NetWorkUtils utils;
+public class NetWorkUtil {
+    private static NetWorkUtil utils;
 
-    public static NetWorkUtils getInstance() {
+    public static NetWorkUtil getInstance() {
         if (utils == null) {
-            utils = new NetWorkUtils();
+            utils = new NetWorkUtil();
         }
 
         return utils;
     }
 
-    private NetWorkUtils() {
+    private NetWorkUtil() {
 
     }
 
