@@ -21,7 +21,6 @@ import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderDialog;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderUtils;
 import com.tt.SingEngine;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
