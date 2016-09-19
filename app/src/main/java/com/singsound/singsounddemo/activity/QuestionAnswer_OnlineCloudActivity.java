@@ -69,6 +69,8 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
 
     private void initQuestionAndAnswers() {
 
+        String para = Config.QVA_PARA;
+
         //  题目1
 
         QuestionAnswer questionAnswer1 = new QuestionAnswer();
@@ -89,16 +91,16 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
         QuestionAnswer.Answer answer41 = new QuestionAnswer.Answer();
         answer41.setAnswer("Are you familiar the roads nearby your home?");
         answers1.add(answer41);
-        QuestionAnswer.Answer answer51 = new QuestionAnswer.Answer();
-        answer51.setAnswer("will you replied him patiently when others ask you for the roads");
-        answers1.add(answer51);
+//        QuestionAnswer.Answer answer51 = new QuestionAnswer.Answer();
+//        answer51.setAnswer("will you replied him patiently when others ask you for the roads");
+//        answers1.add(answer51);
         questionAnswer1.setAnswers(answers1);
 
         mQuestions.add(questionAnswer1);
 
         QuestionAnswerJsonBean questionAnswerJsonBean1 = new QuestionAnswerJsonBean();
         questionAnswerJsonBean1.setQuest_ans("Generally, I am familiar with the roads around my house.");
-        questionAnswerJsonBean1.setPara("Where can I buy some medicine? I get seasick. Go to Lang's Drugstore. How do I get to Lang's Drugstore? Do you have a map? No. OK. I can draw it. Go two blocks and turn left.");
+        questionAnswerJsonBean1.setPara(para);
         JSONArray lm1 = new JSONArray();
         JSONArray key1 = new JSONArray();
         try {
@@ -127,9 +129,9 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
             lm14.put("text", answer41.getAnswer());
             lm1.put(lm14);
 
-            JSONObject lm15 = new JSONObject();
-            lm15.put("text", answer51.getAnswer());
-            lm1.put(lm15);
+//            JSONObject lm15 = new JSONObject();
+//            lm15.put("text", answer51.getAnswer());
+//            lm1.put(lm15);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -143,7 +145,7 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
         //  题目2
         QuestionAnswer questionAnswer2 = new QuestionAnswer();
         questionAnswer2.setQuestion("What does he think of helping others?\n" + "\nTip: 高兴的。。 有用的" + "\n_________________________");
-        String[] keywords2 = {"happy useful", "happy helpful"};
+        String[] keywords2 = {"happy useful", "happy helpful", "good useful", "good helpful"};
         questionAnswer2.setKeyWords(keywords2);
 
         ArrayList<QuestionAnswer.Answer> answers2 = new ArrayList<QuestionAnswer.Answer>();
@@ -166,7 +168,7 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
 
         QuestionAnswerJsonBean questionAnswerJsonBean2 = new QuestionAnswerJsonBean();
         questionAnswerJsonBean2.setQuest_ans(" Helping others is a happy and useful thing.");
-        questionAnswerJsonBean2.setPara("I like help others, Ithink it is useful and happy.");
+        questionAnswerJsonBean2.setPara(para);
         JSONArray lm2 = new JSONArray();
         JSONArray key2 = new JSONArray();
         try {
@@ -178,6 +180,14 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
             JSONObject key12 = new JSONObject();
             key12.put("text", keywords2[1]);
             key2.put(key12);
+
+            JSONObject key13 = new JSONObject();
+            key13.put("text", keywords2[2]);
+            key2.put(key13);
+
+            JSONObject key14 = new JSONObject();
+            key14.put("text", keywords2[3]);
+            key2.put(key14);
 
             JSONObject lm11 = new JSONObject();
             lm11.put("text", answer12.getAnswer());

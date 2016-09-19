@@ -32,6 +32,7 @@ public class Word_OnlineCloudActivity extends BaseCloudActivity implements View.
     private String mCurrentWord = "";
     private String[] words = {"familiar", "patience", "neighbourhood"};
     private List<View> viewList = new ArrayList<>();
+    private int text_green_color, text_red_color, text_yellow_color;
 
     RelativeLayout result_view;
     TextView zongfenview, wanzhengview, liuliview, zhunqueview;
@@ -85,6 +86,10 @@ public class Word_OnlineCloudActivity extends BaseCloudActivity implements View.
     }
 
     private void initUI() {
+
+        text_green_color = getResources().getColor(R.color.text_green);
+        text_red_color = getResources().getColor(R.color.text_red);
+        text_yellow_color = getResources().getColor(R.color.text_yellow);
 
         mRecoderUtils = new AudioRecoderUtils();
         mRecoderUtils.setOnAudioStatusUpdateListener(this);
@@ -176,15 +181,7 @@ public class Word_OnlineCloudActivity extends BaseCloudActivity implements View.
                             overall = result_JsonObject.opt("overall");
                         }
 
-                        if (overall != null) {
-                            line_zhunque.setVisibility(View.GONE);
-                            line_wanzheng.setVisibility(View.GONE);
-                            line_liuli.setVisibility(View.GONE);
-                            zongfenview.setVisibility(View.VISIBLE);
-                            zongfenview.setText(String.valueOf(overall));
-                        } else {
-                            zongfenview.setVisibility(View.GONE);
-                        }
+                        showResultOnTextView(overall);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -192,6 +189,32 @@ public class Word_OnlineCloudActivity extends BaseCloudActivity implements View.
 
             }
         });
+    }
+
+    private void showResultOnTextView(Object overall) {
+        try {
+            if (overall != null) {
+                line_zhunque.setVisibility(View.GONE);
+                line_wanzheng.setVisibility(View.GONE);
+                line_liuli.setVisibility(View.GONE);
+                zongfenview.setVisibility(View.VISIBLE);
+
+                double overall_double = Double.parseDouble(String.valueOf(overall));
+                if (overall_double < 50) {
+                    zongfenview.setTextColor(text_red_color);
+                } else if (overall_double >= 50 && overall_double < 70) {
+                    zongfenview.setTextColor(text_yellow_color);
+                } else if (overall_double >= 70 && overall_double <= 100) {
+                    zongfenview.setTextColor(text_green_color);
+                }
+                zongfenview.setText(String.valueOf(overall));
+
+            } else {
+                zongfenview.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void start() {

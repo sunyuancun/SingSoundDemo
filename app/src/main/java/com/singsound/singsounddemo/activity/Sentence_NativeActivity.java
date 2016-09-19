@@ -34,6 +34,8 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
     private String mCurrentSentence = "";
     private String[] sentences = {"Tom began to learn cooking when he was six years old.", " He prayed for God to rescue him, and every day he scanned the horizon for help, but none seemed forthcoming.", " No matter what you may buy, you might think those products were made in those countries."};
     private List<View> viewList = new ArrayList<>();
+    private int text_green_color, text_red_color, text_yellow_color;
+
 
     RelativeLayout result_view;
     TextView zongfenview, wanzhengview, liuliview, zhunqueview;
@@ -88,6 +90,10 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
     }
 
     private void initUI() {
+
+        text_green_color = getResources().getColor(R.color.text_green);
+        text_red_color = getResources().getColor(R.color.text_red);
+        text_yellow_color = getResources().getColor(R.color.text_yellow);
 
         mRecoderUtils = new AudioRecoderUtils();
         mRecoderUtils.setOnAudioStatusUpdateListener(this);
@@ -174,6 +180,7 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                         Log.d("--------result---------", result.getJSONObject("result").get("overall").toString());
                         result_view.setVisibility(View.VISIBLE);
                         zongfenview.setText(result.getJSONObject("result").get("overall").toString());
+                        showResultOnTextView(result.getJSONObject("result").get("overall"), zongfenview);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -193,6 +200,7 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                         if (integrity != null) {
                             line_wanzheng.setVisibility(View.VISIBLE);
                             wanzhengview.setText(String.valueOf(integrity));
+                            showResultOnTextView(integrity, wanzhengview);
                         } else {
                             line_wanzheng.setVisibility(View.GONE);
                         }
@@ -215,6 +223,7 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                         if (pron != null) {
                             line_zhunque.setVisibility(View.VISIBLE);
                             zhunqueview.setText(String.valueOf(pron));
+                            showResultOnTextView(pron, zhunqueview);
                         } else {
                             line_zhunque.setVisibility(View.GONE);
                         }
@@ -241,6 +250,7 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                             if (fluency_overall != null) {
                                 line_liuli.setVisibility(View.VISIBLE);
                                 liuliview.setText(String.valueOf(fluency_overall));
+                                showResultOnTextView(fluency_overall, liuliview);
                             } else {
                                 line_liuli.setVisibility(View.GONE);
                             }
@@ -257,6 +267,24 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
             }
         });
     }
+
+    private void showResultOnTextView(Object data, TextView tv) {
+        try {
+            if (data != null) {
+                double overall_double = Double.parseDouble(String.valueOf(data));
+                if (overall_double < 50) {
+                    tv.setTextColor(text_red_color);
+                } else if (overall_double >= 50 && overall_double < 70) {
+                    tv.setTextColor(text_yellow_color);
+                } else if (overall_double >= 70 && overall_double <= 100) {
+                    tv.setTextColor(text_green_color);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void start() {
         try {

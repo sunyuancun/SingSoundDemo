@@ -200,7 +200,6 @@ public class SingEngine {
         newCfg = cfg;
     }
 
-
     //   在这设置引擎服务器 api
     public JSONObject buildInitJson() throws JSONException {
         JSONObject cfg = new JSONObject();

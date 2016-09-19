@@ -124,7 +124,7 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
 
             JSONObject json12 = new JSONObject();
             json12.put("answer", 1.0);
-            json12.put("text", "Taking exercise is good for our health. The basketball is the best sport which I like. I will go to the park for playing basketball with my friends on Sunday. I think the basketball serves the best way to release the pressure and find some pleasure at the same time. By playing basketball, we can relax our body and mind.\n" +
+            json12.put("text", "Taking exercise is good for our health. The basketball is the best sport which I like. I will go to the park for playing basketball with my friends on Sunday. I think the basketball serves the best way to release the pressure and find some pleasure at the same time. By playing basketball, we can relax our body and mind." +
                     "Yaoming is one of my favourite basketball star, I also want to be a professional basketball player when i grow up! so i need to practise every day.");
 
             JSONObject json13 = new JSONObject();

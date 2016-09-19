@@ -35,6 +35,8 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
     private String mCurrentWord = "";
     private String[] words = {"familiar", "patience", "neighbourhood"};
     private List<View> viewList = new ArrayList<>();
+    private int text_green_color, text_red_color, text_yellow_color;
+
 
     RelativeLayout result_view;
     TextView zongfenview, wanzhengview, liuliview, zhunqueview;
@@ -43,7 +45,6 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
 
     private AudioRecoderDialog mRecoderDialog;
     private AudioRecoderUtils mRecoderUtils;
-
 
 
     @Override
@@ -93,6 +94,10 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
     }
 
     private void initUI() {
+
+        text_green_color = getResources().getColor(R.color.text_green);
+        text_red_color = getResources().getColor(R.color.text_red);
+        text_yellow_color = getResources().getColor(R.color.text_yellow);
 
         mRecoderUtils = new AudioRecoderUtils();
         mRecoderUtils.setOnAudioStatusUpdateListener(this);
@@ -174,19 +179,47 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
                 try {
                     Log.d("--------result---------", result.toString());
                     if (result.has("result")) {
-                        Log.d("--------result---------", result.getJSONObject("result").get("overall").toString());
-                        line_zhunque.setVisibility(View.GONE);
-                        line_wanzheng.setVisibility(View.GONE);
-                        line_liuli.setVisibility(View.GONE);
-                        result_view.setVisibility(View.VISIBLE);
-                        zongfenview.setText(result.getJSONObject("result").get("overall").toString());
+                        JSONObject result_JsonObject = result.optJSONObject("result");
+                        Object overall = null;
+                        if (result_JsonObject != null) {
+                            overall = result_JsonObject.opt("overall");
+                        }
+
+                        showResultOnTextView(overall);
 
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void showResultOnTextView(Object overall) {
+        try {
+            if (overall != null) {
+                result_view.setVisibility(View.VISIBLE);
+                line_zhunque.setVisibility(View.GONE);
+                line_wanzheng.setVisibility(View.GONE);
+                line_liuli.setVisibility(View.GONE);
+                zongfenview.setVisibility(View.VISIBLE);
+
+                double overall_double = Double.parseDouble(String.valueOf(overall));
+                if (overall_double < 50) {
+                    zongfenview.setTextColor(text_red_color);
+                } else if (overall_double >= 50 && overall_double < 70) {
+                    zongfenview.setTextColor(text_yellow_color);
+                } else if (overall_double >= 70 && overall_double <= 100) {
+                    zongfenview.setTextColor(text_green_color);
+                }
+                zongfenview.setText(String.valueOf(overall));
+
+            } else {
+                zongfenview.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void start() {
