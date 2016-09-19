@@ -200,13 +200,15 @@ public class SingEngine {
         newCfg = cfg;
     }
 
+
+    //   在这设置引擎服务器 api
     public JSONObject buildInitJson() throws JSONException {
         JSONObject cfg = new JSONObject();
         JSONObject cloud = new JSONObject();
         String svr = "ws://api.cloud.ssapi.cn:8080";
         cloud.put("enable", 1)
 //                .put("server", svr)
-//        .put("server", "ws://120.92.133.98:8090")
+                .put("server", "ws://120.92.133.98:8090")
                 .put("connectTimeout", 20)
                 .put("serverTimeout", 60);
 

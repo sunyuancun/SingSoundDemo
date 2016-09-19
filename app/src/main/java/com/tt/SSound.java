@@ -12,7 +12,7 @@ public final class SSound {
     private static boolean flag = false;
     public static JSONObject resultjson;
     private static String servertype = "cloud";
-    //    private static String cloudServer = "ws://api.cloud.ssapi.cn:8080";
+//        private static String cloudServer = "ws://api.cloud.ssapi.cn:8080";
     private static String cloudServer = "ws://120.92.133.98:8090"; //测试服务器
 
     private static String appkey = "1459219202000001";   //测试环境

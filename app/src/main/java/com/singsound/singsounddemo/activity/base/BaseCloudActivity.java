@@ -72,6 +72,7 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
                     engine = SingEngine.newInstance(BaseCloudActivity.this, BaseCloudActivity.this, null);
                     // 2. 设置引擎类型    cloud ：云端    native： 离线     auto： 云端优先，无网络状态native
                     engine.setServerType("cloud");
+//                    engine.setServerType("auto");
                     // 3 构建引擎初始化参数
                     JSONObject cfg_init = engine.buildInitJson();
                     engine.setNewCfg(cfg_init);
