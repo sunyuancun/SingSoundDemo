@@ -74,7 +74,7 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
         //  题目1
 
         QuestionAnswer questionAnswer1 = new QuestionAnswer();
-        questionAnswer1.setQuestion("你熟悉你家附近的道路吗？\n" + "_________________________\n" + "\nTip: Generally, I am familiar with the roads around my house.");
+        questionAnswer1.setQuestion("你熟悉你家附近的道路吗？\n" + "_________________________\n" + "\n Generally, I am familiar with the roads around my house.");
         String[] keywords1 = {"familiar roads", "familiar way"};
         questionAnswer1.setKeyWords(keywords1);
 
