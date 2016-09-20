@@ -1,5 +1,6 @@
 package com.singsound.singsounddemo.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -37,7 +38,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     private String mCurrentSentence = "";
     private String[] sentences = {"Tom began to learn cooking when he was six years old.", " He prayed for God to rescue him, and every day he scanned the horizon for help, but none seemed forthcoming.", " No matter what you may buy, you might think those products were made in those countries."};
     private List<View> viewList = new ArrayList<>();
-    private int text_green_color, text_red_color, text_yellow_color;
 
     RelativeLayout result_view;
     TextView zongfenview, wanzhengview, liuliview, zhunqueview;
@@ -46,6 +46,13 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
 
     private AudioRecoderDialog mRecoderDialog;
     private AudioRecoderUtils mRecoderUtils;
+
+    int mPosition = 0;
+    public static UpdateOnlineSentenceCallBack mUpdateOnlineSentenceCallBack;
+
+    public interface UpdateOnlineSentenceCallBack {
+        void UpdateOnlineSentence(Context context, int position,String[] sentences, List<SentenceDetail> list);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +71,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     }
 
     private void initUI() {
-
-        text_green_color = getResources().getColor(R.color.text_green);
-        text_red_color = getResources().getColor(R.color.text_red);
-        text_yellow_color = getResources().getColor(R.color.text_yellow);
 
         mRecoderUtils = new AudioRecoderUtils();
         mRecoderUtils.setOnAudioStatusUpdateListener(this);
@@ -133,7 +136,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
 
     @Override
     public void onUpdate(double db) {
-        Log.e("-----------------", "update");
         if (null != mRecoderDialog) {
             mRecoderDialog.setLevel((int) db);
         }
@@ -147,6 +149,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
 
         @Override
         public void onPageSelected(int position) {
+            mPosition = position;
             mCurrentSentence = sentences[position];
             result_view.setVisibility(View.INVISIBLE);
         }
@@ -168,7 +171,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     @Override
     protected void getResultFromServer(JSONObject result) {
         setResult(result);
-//        updateView(result);
     }
 
     private void setResult(final JSONObject result) {
@@ -260,15 +262,29 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                updateView(result);
             }
         });
     }
 
     private void updateView(JSONObject result) {
         try {
+            List<SentenceDetail> sentenceDetailList = new ArrayList<>();
             JSONArray details = result.getJSONObject("result").getJSONArray("details");
-            List<SentenceDetail> sentenceDetailList = JSON.parseArray(details.toString(), SentenceDetail.class);
-            System.out.print(sentenceDetailList.size());
+
+            for (int i = 0; i < details.length(); i++) {
+                JSONObject detail = (JSONObject) details.get(i);
+                SentenceDetail sentenceDetail = new SentenceDetail();
+                String charx = detail.getString("char");
+                double score = detail.getDouble("score");
+                sentenceDetail.setCharX(charx);
+                sentenceDetail.setScore(score);
+                sentenceDetailList.add(i, sentenceDetail);
+            }
+
+            mUpdateOnlineSentenceCallBack.UpdateOnlineSentence(this, mPosition, sentences,sentenceDetailList);
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("---SentenceDetail---", "error    json  parson  error");

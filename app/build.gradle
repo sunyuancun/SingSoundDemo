@@ -27,5 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.2.0'
-    compile files('libs/fastjson-1.2.17.jar')
+    
 }

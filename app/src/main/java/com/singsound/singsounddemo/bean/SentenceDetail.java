@@ -7,146 +7,43 @@ public class SentenceDetail {
 
 
     /**
-     * fluency : 99
-     * dur : 280
-     * score : 63
-     * start : 100
+     * fluency : 100
+     * dur : 470
+     * score : 84
+     * start : 1020
      * liaisonscore : 0
      * toneref : 0
-     * stressscore : 0
+     * stressscore : 1
      * stressref : 0
-     * char : Tom
-     * sensescore : 0
+     * char : cooking
+     * sensescore : 1
      * senseref : 0
      * tonescore : 0
-     * end : 380
+     * end : 1490
      * liaisonref : 0
      */
 
-    private int fluency;
-    private int dur;
-    private int score;
-    private int start;
-    private int liaisonscore;
-    private int toneref;
-    private int stressscore;
-    private int stressref;
-    private String word;
-    private int sensescore;
-    private int senseref;
-    private int tonescore;
-    private int end;
-    private int liaisonref;
 
-    public int getFluency() {
-        return fluency;
-    }
+    private double score;
 
-    public void setFluency(int fluency) {
-        this.fluency = fluency;
-    }
+    private String charX;
 
-    public int getDur() {
-        return dur;
-    }
 
-    public void setDur(int dur) {
-        this.dur = dur;
-    }
-
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
-    public int getStart() {
-        return start;
+
+    public String getCharX() {
+        return charX;
     }
 
-    public void setStart(int start) {
-        this.start = start;
+    public void setCharX(String charX) {
+        this.charX = charX;
     }
 
-    public int getLiaisonscore() {
-        return liaisonscore;
-    }
-
-    public void setLiaisonscore(int liaisonscore) {
-        this.liaisonscore = liaisonscore;
-    }
-
-    public int getToneref() {
-        return toneref;
-    }
-
-    public void setToneref(int toneref) {
-        this.toneref = toneref;
-    }
-
-    public int getStressscore() {
-        return stressscore;
-    }
-
-    public void setStressscore(int stressscore) {
-        this.stressscore = stressscore;
-    }
-
-    public int getStressref() {
-        return stressref;
-    }
-
-    public void setStressref(int stressref) {
-        this.stressref = stressref;
-    }
-
-    public String getWord() {
-        return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
-    }
-
-    public int getSensescore() {
-        return sensescore;
-    }
-
-    public void setSensescore(int sensescore) {
-        this.sensescore = sensescore;
-    }
-
-    public int getSenseref() {
-        return senseref;
-    }
-
-    public void setSenseref(int senseref) {
-        this.senseref = senseref;
-    }
-
-    public int getTonescore() {
-        return tonescore;
-    }
-
-    public void setTonescore(int tonescore) {
-        this.tonescore = tonescore;
-    }
-
-    public int getEnd() {
-        return end;
-    }
-
-    public void setEnd(int end) {
-        this.end = end;
-    }
-
-    public int getLiaisonref() {
-        return liaisonref;
-    }
-
-    public void setLiaisonref(int liaisonref) {
-        this.liaisonref = liaisonref;
-    }
 }
