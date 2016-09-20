@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.singsound.singsounddemo.R;
+import com.singsound.singsounddemo.activity.Sentence_OnlineCloudActivity;
+import com.singsound.singsounddemo.bean.SentenceDetail;
 
 import java.util.List;
 
@@ -47,5 +49,6 @@ public class WordPagerAdapter extends PagerAdapter {
         container.addView(v, position);
         return v;
     }
+
 
 }

@@ -12,15 +12,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.singsound.singsounddemo.Config;
 import com.singsound.singsounddemo.R;
 import com.singsound.singsounddemo.activity.base.BaseCloudActivity;
 import com.singsound.singsounddemo.adapter.WordPagerAdapter;
+import com.singsound.singsounddemo.bean.SentenceDetail;
 import com.singsound.singsounddemo.utils.TitleBarUtil;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderDialog;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderUtils;
 import com.tt.SingEngine;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -165,6 +168,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     @Override
     protected void getResultFromServer(JSONObject result) {
         setResult(result);
+//        updateView(result);
     }
 
     private void setResult(final JSONObject result) {
@@ -176,7 +180,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                         Log.d("--------result---------", result.getJSONObject("result").get("overall").toString());
                         result_view.setVisibility(View.VISIBLE);
                         zongfenview.setText(result.getJSONObject("result").get("overall").toString());
-                        showResultOnTextView(result.getJSONObject("result").get("overall"), zongfenview);
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -196,7 +200,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                         if (integrity != null) {
                             line_wanzheng.setVisibility(View.VISIBLE);
                             wanzhengview.setText(String.valueOf(integrity));
-                            showResultOnTextView(integrity, wanzhengview);
                         } else {
                             line_wanzheng.setVisibility(View.GONE);
                         }
@@ -219,7 +222,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                         if (pron != null) {
                             line_zhunque.setVisibility(View.VISIBLE);
                             zhunqueview.setText(String.valueOf(pron));
-                            showResultOnTextView(pron, zhunqueview);
                         } else {
                             line_zhunque.setVisibility(View.GONE);
                         }
@@ -246,7 +248,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                             if (fluency_overall != null) {
                                 line_liuli.setVisibility(View.VISIBLE);
                                 liuliview.setText(String.valueOf(fluency_overall));
-                                showResultOnTextView(fluency_overall, liuliview);
                             } else {
                                 line_liuli.setVisibility(View.GONE);
                             }
@@ -263,22 +264,17 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
         });
     }
 
-    private void showResultOnTextView(Object data, TextView tv) {
+    private void updateView(JSONObject result) {
         try {
-            if (data != null) {
-                double overall_double = Double.parseDouble(String.valueOf(data));
-                if (overall_double < 50) {
-                    tv.setTextColor(text_red_color);
-                } else if (overall_double >= 50 && overall_double < 70) {
-                    tv.setTextColor(text_yellow_color);
-                } else if (overall_double >= 70 && overall_double <= 100) {
-                    tv.setTextColor(text_green_color);
-                }
-            }
-        } catch (Exception e) {
+            JSONArray details = result.getJSONObject("result").getJSONArray("details");
+            List<SentenceDetail> sentenceDetailList = JSON.parseArray(details.toString(), SentenceDetail.class);
+            System.out.print(sentenceDetailList.size());
+        } catch (JSONException e) {
             e.printStackTrace();
+            Log.e("---SentenceDetail---", "error    json  parson  error");
         }
     }
+
 
     private void start() {
         try {
