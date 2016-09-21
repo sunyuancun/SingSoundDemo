@@ -1,5 +1,6 @@
 package com.singsound.singsounddemo.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -42,7 +43,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     private List<View> viewList = new ArrayList<>();
 
     RelativeLayout result_view;
-    TextView zongfenview, wanzhengview, liuliview, zhunqueview, update_color_sentence_view;
+    TextView zongfenview, wanzhengview, liuliview, zhunqueview;
     Button button_word, button_replay;
     LinearLayout line_wanzheng, line_zhunque, line_liuli;
 
@@ -50,6 +51,12 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     private AudioRecoderUtils mRecoderUtils;
 
     int mPosition = 0;
+
+    public static UpdateOnlineColorCallBack mUpdateOnlineColorCallBack;
+
+    public interface UpdateOnlineColorCallBack {
+        void UpdateOnlineColor(Context context, int position, List<SentenceDetail> list);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +83,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
         mRecoderDialog.setShowAlpha(0.98f);
 
         result_view = (RelativeLayout) findViewById(R.id.result_view);
-        update_color_sentence_view = (TextView) findViewById(R.id.update_color_sentence);
         button_word = (Button) findViewById(R.id.bt_word);
         button_word.setOnTouchListener(this);
         button_replay = (Button) findViewById(R.id.bt_replay);
@@ -100,6 +106,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
         viewPager.setCurrentItem(0);
         mCurrentSentence = sentences[0];
         viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
+        viewPager.setOffscreenPageLimit(0);
     }
 
     @Override
@@ -280,8 +287,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                 sentenceDetail.setScore(score);
                 sentenceDetailList.add(i, sentenceDetail);
             }
-
-            update_color_sentenceView(sentenceDetailList);
+            mUpdateOnlineColorCallBack.UpdateOnlineColor(Sentence_OnlineCloudActivity.this,mPosition, sentenceDetailList);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -290,41 +296,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     }
 
 
-    //   textview  显示多种颜色设置
-
-    public void update_color_sentenceView(List<SentenceDetail> list) {
-        update_color_sentence_view.setVisibility(View.VISIBLE);
-        int startSpan = 0;
-        int endSpan = 0;
-        String str = "";
-        double s_sore;
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            startSpan = str.length();
-            str = str + list.get(i).getCharX() + " ";
-            s_sore = list.get(i).getScore();
-            endSpan = str.length();
-            stringBuilder.append(list.get(i).getCharX() + " ");
-
-            InputObject nameClick = new InputObject();
-            nameClick.setStartSpan(startSpan);
-            nameClick.setEndSpan(endSpan);
-            nameClick.setStringBuilder(stringBuilder);
-            if (s_sore < 50)
-                nameClick.setTextColor(getResources().getColor(R.color.text_red));
-            else if (s_sore >= 50 && s_sore < 70)
-                nameClick.setTextColor(getResources().getColor(R.color.text_yellow));
-            else if (s_sore >= 70 && s_sore <= 100)
-                nameClick.setTextColor(getResources().getColor(R.color.text_green));
-            else
-                nameClick.setTextColor(getResources().getColor(R.color.text_red));
-            MultiActionTextView.addActionOnTextViewWithoutLink(nameClick);
-            MultiActionTextView.setSpannableText(update_color_sentence_view,
-                    stringBuilder, Color.RED);
-
-        }
-
-    }
 
 
     private void start() {
