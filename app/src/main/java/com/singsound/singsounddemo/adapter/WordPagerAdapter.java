@@ -24,7 +24,11 @@ import java.util.List;
 /**
  * Created by wang on 2016/8/31.
  */
-public class WordPagerAdapter extends PagerAdapter implements Sentence_OnlineCloudActivity.UpdateOnlineColorCallBack, Sentence_NativeActivity.UpdateOffineColorCallBack {
+public class WordPagerAdapter extends PagerAdapter
+        implements Sentence_OnlineCloudActivity.UpdateOnlineColorCallBack,
+        Sentence_OnlineCloudActivity.PageScrollStateChangedCallBack,
+        Sentence_NativeActivity.UpdateOffineColorCallBack,
+        Sentence_NativeActivity.PageScrollStateChangedCallBack{
 
     List<View> viewList;
     String[] words;
@@ -33,7 +37,9 @@ public class WordPagerAdapter extends PagerAdapter implements Sentence_OnlineClo
         this.viewList = viewList;
         this.words = words;
         Sentence_OnlineCloudActivity.mUpdateOnlineColorCallBack = this;
+        Sentence_OnlineCloudActivity.mPageScrollStateChangedCallBack = this;
         Sentence_NativeActivity.mUpdateOffineColorCallBack = this;
+        Sentence_NativeActivity.mPageScrollStateChangedCallBack = this;
     }
 
     @Override
@@ -104,6 +110,22 @@ public class WordPagerAdapter extends PagerAdapter implements Sentence_OnlineClo
                     stringBuilder, Color.RED);
 
         }
+    }
+
+    @Override
+    public void initpositionViewOffine(int position) {
+        refreshContentView(position);
+    }
+
+    @Override
+    public void initpositionViewOnline( int position) {
+        refreshContentView(position);
+    }
+
+    private void refreshContentView(int position) {
+        View v = viewList.get(position);
+        TextView tv_word = (TextView) v.findViewById(R.id.word);
+        tv_word.setText(words[position]);
     }
 
 }

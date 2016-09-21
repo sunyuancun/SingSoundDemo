@@ -51,11 +51,18 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     private AudioRecoderUtils mRecoderUtils;
 
     int mPosition = 0;
+    int lastposition = 0;
 
     public static UpdateOnlineColorCallBack mUpdateOnlineColorCallBack;
 
     public interface UpdateOnlineColorCallBack {
         void UpdateOnlineColor(Context context, int position, List<SentenceDetail> list);
+    }
+
+    public static PageScrollStateChangedCallBack mPageScrollStateChangedCallBack;
+
+    public interface PageScrollStateChangedCallBack {
+        void initpositionViewOnline(int position);
     }
 
     @Override
@@ -154,6 +161,9 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
 
         @Override
         public void onPageSelected(int position) {
+            lastposition = mPosition;
+            mPageScrollStateChangedCallBack.initpositionViewOnline(lastposition);
+
             mPosition = position;
             mCurrentSentence = sentences[position];
             result_view.setVisibility(View.INVISIBLE);
@@ -287,15 +297,13 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                 sentenceDetail.setScore(score);
                 sentenceDetailList.add(i, sentenceDetail);
             }
-            mUpdateOnlineColorCallBack.UpdateOnlineColor(Sentence_OnlineCloudActivity.this,mPosition, sentenceDetailList);
+            mUpdateOnlineColorCallBack.UpdateOnlineColor(Sentence_OnlineCloudActivity.this, mPosition, sentenceDetailList);
 
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("---SentenceDetail---", "error    json  parson  error");
         }
     }
-
-
 
 
     private void start() {

@@ -22,10 +22,10 @@
 
     <RelativeLayout
         android:id="@+id/rv"
-        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/background">
 
         <include layout="@layout/item_bottom_word_sen_mofang"></include>
     </RelativeLayout>

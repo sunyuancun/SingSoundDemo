@@ -52,11 +52,18 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
 
 
     int mPosition = 0;
+    int lastposition = 0;
 
     public static UpdateOffineColorCallBack mUpdateOffineColorCallBack;
 
     public interface UpdateOffineColorCallBack {
         void UpdateOffineColor(Context context, int position, List<SentenceDetail> list);
+    }
+
+    public static PageScrollStateChangedCallBack mPageScrollStateChangedCallBack;
+
+    public interface PageScrollStateChangedCallBack {
+        void initpositionViewOffine(int position);
     }
 
     @Override
@@ -157,6 +164,9 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
 
         @Override
         public void onPageSelected(int position) {
+            lastposition = mPosition;
+            mPageScrollStateChangedCallBack.initpositionViewOffine(lastposition);
+
             mPosition = position;
             mCurrentSentence = sentences[position];
             result_view.setVisibility(View.INVISIBLE);
