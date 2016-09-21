@@ -1,6 +1,7 @@
 package com.singsound.singsounddemo.adapter;
 
 import android.support.v4.view.PagerAdapter;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class ArticlePagerAdapter extends PagerAdapter {
         TextView click_tv = (TextView) v.findViewById(R.id.click_tv);
         TextView tv_title = (TextView) v.findViewById(R.id.title);
         tv_position.setText(position + 1 + "/" + viewList.size());
+        tv_word.setMovementMethod(ScrollingMovementMethod.getInstance());
         tv_word.setText((String) map.get("answer"));
         tv_title.setText((String) map.get("title"));
         click_tv.setOnClickListener(new View.OnClickListener() {

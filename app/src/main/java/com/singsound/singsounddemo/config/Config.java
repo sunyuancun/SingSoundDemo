@@ -1,4 +1,4 @@
-package com.singsound.singsounddemo;
+package com.singsound.singsounddemo.config;
 
 /**
  * Created by wang on 2016/8/25.

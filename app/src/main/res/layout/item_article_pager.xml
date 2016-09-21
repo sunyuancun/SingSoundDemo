@@ -28,8 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center"
         android:background="@drawable/shape_recoder_btn_recoding"
+        android:gravity="center"
         android:text="点击查看答案"
         android:textSize="20sp" />
 
@@ -37,8 +37,10 @@
         android:id="@+id/detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="o"
+        android:layout_marginTop="5dp"
+        android:maxLines="15"
+        android:scrollbars="vertical"
+        android:singleLine="false"
         android:textSize="16sp"
         android:visibility="invisible" />
 

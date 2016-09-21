@@ -1,6 +1,5 @@
 package com.singsound.singsounddemo.activity;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -13,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.singsound.singsounddemo.Config;
+import com.singsound.singsounddemo.config.Config;
 import com.singsound.singsounddemo.R;
 import com.singsound.singsounddemo.activity.base.BaseNativeActivity;
 import com.singsound.singsounddemo.adapter.WordPagerAdapter;
@@ -22,7 +21,6 @@ import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderDialog;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderUtils;
 import com.tt.SingEngine;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

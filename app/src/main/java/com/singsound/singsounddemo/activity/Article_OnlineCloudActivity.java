@@ -12,7 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.singsound.singsounddemo.Config;
+import com.singsound.singsounddemo.config.ArticleConfig;
+import com.singsound.singsounddemo.config.Config;
 import com.singsound.singsounddemo.R;
 import com.singsound.singsounddemo.activity.base.BaseCloudActivity;
 import com.singsound.singsounddemo.adapter.ArticlePagerAdapter;
@@ -65,7 +66,6 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
 
     @Override
     public void onUpdate(double db) {
-        Log.e("-----------------", "update");
         if (null != mRecoderDialog) {
             mRecoderDialog.setLevel((int) db);
         }
@@ -88,8 +88,6 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
         TitleBarUtil.initTitle(this, getIntent().getStringExtra("TITLE"));
     }
 
-    JSONArray jsonArray_pic_article1;
-    JSONArray jsonArray_pic_article2;
 
     private void initUIAndData() {
 
@@ -100,78 +98,15 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
         mRecoderDialog.setShowAlpha(0.98f);
 
         HashMap<String, String> map1 = new HashMap<>();
-        map1.put("title", "关于篮球\n" +
-                "要点：\n" +
-                "1. 运动对人的健康非常有益。\n" +
-                "2. 我最喜欢的运动是篮球，我经常在周末和朋友们在公园打篮球。\n" +
-                "3. 我觉得打篮球是释放压力的最好方式，还可以带给我们许多乐趣。\n" +
-                "4. 姚明是我最喜爱的篮球明星。\n" +
-                "5. 我打算长大后成为一名篮球运动员，所以我现在要每天练习。");
-        map1.put("answer", "As we all know, doing sports is good for our health, because it can keep us healthy. As far as am concerned, i like playing basketball, and i often play basketball in the park with my friends on weekends. i think this is the best way to discharge the pressure. At the same time, it can bring lots of fun to us. I like Yaoming very much, he is my favourite basketball star. He can play basketball very well. I hope i can become a basketball player when i grow up. Only in this way, I can make some contribution to my motherland. So I have to practise every day.");
+        map1.put("title", ArticleConfig.titles[0]);
+        map1.put("answer", ArticleConfig.biaozhun_ans[0]);
         dataList.add(map1);
 
         HashMap<String, String> map2 = new HashMap<>();
-        map2.put("title", "说出下面的话：我和我最好的朋友相处的非常好，但是我们却各有不同。他比我更有趣，更外向，而我很严肃。他是运动型的，各种体育运动都很喜欢，而我更擅长于学习。");
-        map2.put("answer", "My best friend and I get along with each other quite well. But we are so different. He is funnier, more outgoing than I am and i'm more serious. He is more athletic and likes to play all kinds of sports but I am smarter on study.");
+        map2.put("title", ArticleConfig.titles[1]);
+        map2.put("answer", ArticleConfig.biaozhun_ans[1]);
         dataList.add(map2);
 
-
-        try {
-
-            JSONObject json11 = new JSONObject();
-            json11.put("answer", 1.0);
-            json11.put("text", "As we all know, doing sports is good for our health, because it can keep us healthy. As far as am concerned, i like playing basketball, and i often play basketball in the park with my friends on weekends. i think this is the best way to discharge the pressure. At the same time, it can bring lots of fun to us. I like Yaoming very much, he is my favourite basketball star. He can play basketball very well. I hope i can become a basketball player when i grow up. Only in this way, I can make some contribution to my motherland. So I have to practise every day.");
-
-            JSONObject json12 = new JSONObject();
-            json12.put("answer", 1.0);
-            json12.put("text", "Taking exercise is good for our health. The basketball is the best sport which I like. I will go to the park for playing basketball with my friends on Sunday. I think the basketball serves the best way to release the pressure and find some pleasure at the same time. By playing basketball, we can relax our body and mind." +
-                    "Yaoming is one of my favourite basketball star, I also want to be a professional basketball player when i grow up! so i need to practise every day.");
-
-            JSONObject json13 = new JSONObject();
-            json13.put("answer", 1.0);
-            json13.put("text", "It will be good for your health to do exercise. Among all the sports, I like basketball most. I always play basketball with my friends together on sunday. As one of the most important sports in the world, Playing basketball is the best way to release the pressure. it will give me a lot of fun. My favorite basketball star is yaoming, the famous player from China. i wish i will be a basketball player in the future.");
-
-            JSONObject json14 = new JSONObject();
-            json14.put("answer", 1.0);
-            json14.put("text", "Sports are very good for our health. My favourite sport is basketball. I often play basketball in the park with my friends at weekends. I think playing basketball is the best way to release my tension. It also can bring us a lot of joy. Yaoming is my favourite basketball star. I intend to be a basketball player when I grow up, so from now on, I must practise playing basketball everyday.");
-
-            JSONObject json15 = new JSONObject();
-            json15.put("answer", 1.0);
-            json15.put("text", "It is very good for our health to do some sports. Basketball is my favourite sport. At weekends, I often play basketball with my friends in the park. I think it is the best way to release my pressure. Also, I can feel more enjoyable from playing basketball. My favourite basketball star is Yaoming. I am going to practise playing basketball everyday so that I can become a basketball player when I grow up.");
-
-            JSONObject json16 = new JSONObject();
-            json16.put("answer", 1.0);
-            json16.put("text", "Sports can make us become healthy. My favourite sport is basketball. I always ask some friends come to the park to play basketball with me at weekends. In my opinion, playing basketball is the best way of unwinding. It can also bring joy for us. Yaoming is my favourite basketball star. I have to do some exercise everyday, because I dream of becoming a basketball player in the future.");
-
-            jsonArray_pic_article1 = new JSONArray();
-            jsonArray_pic_article1.put(json11);
-            jsonArray_pic_article1.put(json12);
-            jsonArray_pic_article1.put(json13);
-            jsonArray_pic_article1.put(json14);
-            jsonArray_pic_article1.put(json15);
-            jsonArray_pic_article1.put(json16);
-
-            JSONObject json21 = new JSONObject();
-            json21.put("answer", 1.0);
-            json21.put("text", "My best friend and I get along with each other quite well. But we are so different. He is funnier, more outgoing than I am and i'm more serious. He is more athletic and likes to play all kinds of sports but I am smarter on study.");
-
-            JSONObject json22 = new JSONObject();
-            json22.put("answer", 1.0);
-            json22.put("text", "My best friend and I get along with each other quite well. But we are so different. He is funnier, more outgoing than I am and i'm more serious. He is more athletic and likes to play all kinds of sports but I am good at  study.");
-
-            JSONObject json23 = new JSONObject();
-            json23.put("answer", 1.0);
-            json23.put("text", "My best friend and I get along with each other quite well. But we are so different. He is funnier, more outgoing than I am and i'm more serious. He is more athletic . likes to play all kinds of sports but I am smarter on study.");
-
-            jsonArray_pic_article2 = new JSONArray();
-            jsonArray_pic_article2.put(json21);
-            jsonArray_pic_article2.put(json22);
-            jsonArray_pic_article2.put(json23);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         result_view = (RelativeLayout) findViewById(R.id.result_view);
         button_word = (Button) findViewById(R.id.bt_word);
@@ -193,7 +128,7 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
 
         viewPager.setAdapter(new ArticlePagerAdapter(viewList, dataList));
         viewPager.setCurrentItem(0);
-        mCurrentJSONArray = jsonArray_pic_article1;
+        mCurrentJSONArray = ArticleConfig.getJsonArrayLm(0);
         viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
     }
 
@@ -206,9 +141,9 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
         @Override
         public void onPageSelected(int position) {
             if (position == 0) {
-                mCurrentJSONArray = jsonArray_pic_article1;
+                mCurrentJSONArray = ArticleConfig.getJsonArrayLm(0);
             } else if (position == 1) {
-                mCurrentJSONArray = jsonArray_pic_article2;
+                mCurrentJSONArray = ArticleConfig.getJsonArrayLm(1);
             }
             result_view.setVisibility(View.INVISIBLE);
         }
@@ -250,8 +185,9 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
         runOnUiThread(new Runnable() {
             public void run() {
                 try {
-                    Log.d("--------result---------", result.toString());
+                    System.out.print(result.toString());
                     if (result.has("result")) {
+                        Log.d("--------result---------", result.toString());
                         Log.d("--------result---------", result.getJSONObject("result").get("overall").toString());
                         line_zhunque.setVisibility(View.GONE);
                         line_wanzheng.setVisibility(View.GONE);

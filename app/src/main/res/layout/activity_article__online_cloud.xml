@@ -15,11 +15,14 @@
         android:id="@+id/viewPager1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/rv"
         android:layout_below="@+id/title_bar"
         android:background="@color/background" />
 
 
     <RelativeLayout
+        android:id="@+id/rv"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">

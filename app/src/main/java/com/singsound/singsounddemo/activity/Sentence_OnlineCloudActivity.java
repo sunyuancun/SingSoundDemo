@@ -1,6 +1,5 @@
 package com.singsound.singsounddemo.activity;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -15,8 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.singsound.singsounddemo.Config;
+import com.singsound.singsounddemo.config.Config;
 import com.singsound.singsounddemo.R;
 import com.singsound.singsounddemo.activity.base.BaseCloudActivity;
 import com.singsound.singsounddemo.adapter.WordPagerAdapter;

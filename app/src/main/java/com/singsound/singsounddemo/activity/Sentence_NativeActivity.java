@@ -1,7 +1,9 @@
 package com.singsound.singsounddemo.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,15 +14,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.singsound.singsounddemo.Config;
+import com.singsound.singsounddemo.bean.SentenceDetail;
+import com.singsound.singsounddemo.config.Config;
 import com.singsound.singsounddemo.R;
 import com.singsound.singsounddemo.activity.base.BaseNativeActivity;
 import com.singsound.singsounddemo.adapter.WordPagerAdapter;
 import com.singsound.singsounddemo.utils.TitleBarUtil;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderDialog;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderUtils;
+import com.singsound.singsounddemo.utils.multiaction_textview.InputObject;
+import com.singsound.singsounddemo.utils.multiaction_textview.MultiActionTextView;
 import com.tt.SingEngine;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,11 +40,9 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
     private String mCurrentSentence = "";
     private String[] sentences = {"Tom began to learn cooking when he was six years old.", " He prayed for God to rescue him, and every day he scanned the horizon for help, but none seemed forthcoming.", " No matter what you may buy, you might think those products were made in those countries."};
     private List<View> viewList = new ArrayList<>();
-    private int text_green_color, text_red_color, text_yellow_color;
-
 
     RelativeLayout result_view;
-    TextView zongfenview, wanzhengview, liuliview, zhunqueview;
+    TextView zongfenview, wanzhengview, liuliview, zhunqueview, update_color_sentence_view;
     Button button_word, button_replay;
     LinearLayout line_wanzheng, line_zhunque, line_liuli;
 
@@ -66,7 +70,6 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
 
     @Override
     public void onUpdate(double db) {
-        Log.e("-----------------", "update");
         if (null != mRecoderDialog) {
             mRecoderDialog.setLevel((int) db);
         }
@@ -90,11 +93,6 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
     }
 
     private void initUI() {
-
-        text_green_color = getResources().getColor(R.color.text_green);
-        text_red_color = getResources().getColor(R.color.text_red);
-        text_yellow_color = getResources().getColor(R.color.text_yellow);
-
         mRecoderUtils = new AudioRecoderUtils();
         mRecoderUtils.setOnAudioStatusUpdateListener(this);
 
@@ -102,6 +100,7 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
         mRecoderDialog.setShowAlpha(0.98f);
 
         result_view = (RelativeLayout) findViewById(R.id.result_view);
+        update_color_sentence_view = (TextView) findViewById(R.id.update_color_sentence);
         button_word = (Button) findViewById(R.id.bt_word);
         button_word.setOnTouchListener(this);
         button_replay = (Button) findViewById(R.id.bt_replay);
@@ -180,7 +179,6 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                         Log.d("--------result---------", result.getJSONObject("result").get("overall").toString());
                         result_view.setVisibility(View.VISIBLE);
                         zongfenview.setText(result.getJSONObject("result").get("overall").toString());
-                        showResultOnTextView(result.getJSONObject("result").get("overall"), zongfenview);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -200,7 +198,6 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                         if (integrity != null) {
                             line_wanzheng.setVisibility(View.VISIBLE);
                             wanzhengview.setText(String.valueOf(integrity));
-                            showResultOnTextView(integrity, wanzhengview);
                         } else {
                             line_wanzheng.setVisibility(View.GONE);
                         }
@@ -223,7 +220,6 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                         if (pron != null) {
                             line_zhunque.setVisibility(View.VISIBLE);
                             zhunqueview.setText(String.valueOf(pron));
-                            showResultOnTextView(pron, zhunqueview);
                         } else {
                             line_zhunque.setVisibility(View.GONE);
                         }
@@ -250,7 +246,6 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                             if (fluency_overall != null) {
                                 line_liuli.setVisibility(View.VISIBLE);
                                 liuliview.setText(String.valueOf(fluency_overall));
-                                showResultOnTextView(fluency_overall, liuliview);
                             } else {
                                 line_liuli.setVisibility(View.GONE);
                             }
@@ -264,27 +259,69 @@ public class Sentence_NativeActivity extends BaseNativeActivity implements View.
                     e.printStackTrace();
                 }
 
+                updateView(result);
+
             }
         });
     }
 
-    private void showResultOnTextView(Object data, TextView tv) {
+    private void updateView(JSONObject result) {
         try {
-            if (data != null) {
-                double overall_double = Double.parseDouble(String.valueOf(data));
-                if (overall_double < 50) {
-                    tv.setTextColor(text_red_color);
-                } else if (overall_double >= 50 && overall_double < 70) {
-                    tv.setTextColor(text_yellow_color);
-                } else if (overall_double >= 70 && overall_double <= 100) {
-                    tv.setTextColor(text_green_color);
-                }
+            List<SentenceDetail> sentenceDetailList = new ArrayList<>();
+            JSONArray details = result.getJSONObject("result").getJSONArray("details");
+
+            for (int i = 0; i < details.length(); i++) {
+                JSONObject detail = (JSONObject) details.get(i);
+                SentenceDetail sentenceDetail = new SentenceDetail();
+                String charx = detail.getString("char");
+                double score = detail.getDouble("score");
+                sentenceDetail.setCharX(charx);
+                sentenceDetail.setScore(score);
+                sentenceDetailList.add(i, sentenceDetail);
             }
-        } catch (Exception e) {
+
+            update_color_sentenceView(sentenceDetailList);
+
+        } catch (JSONException e) {
             e.printStackTrace();
+            Log.e("---SentenceDetail---", "error    json  parson  error");
         }
     }
 
+
+    //   textview  显示多种颜色设置
+
+    public void update_color_sentenceView(List<SentenceDetail> list) {
+        update_color_sentence_view.setVisibility(View.VISIBLE);
+        int startSpan = 0;
+        int endSpan = 0;
+        String str = "";
+        double s_sore;
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            startSpan = str.length();
+            str = str + list.get(i).getCharX() + " ";
+            s_sore = list.get(i).getScore();
+            endSpan = str.length();
+            stringBuilder.append(list.get(i).getCharX() + " ");
+
+            InputObject nameClick = new InputObject();
+            nameClick.setStartSpan(startSpan);
+            nameClick.setEndSpan(endSpan);
+            nameClick.setStringBuilder(stringBuilder);
+            if (s_sore < 50)
+                nameClick.setTextColor(Color.RED);
+            else if (s_sore >= 50 && s_sore < 70)
+                nameClick.setTextColor(Color.YELLOW);
+            else if (s_sore >= 70 && s_sore < 100)
+                nameClick.setTextColor(Color.GREEN);
+            MultiActionTextView.addActionOnTextViewWithoutLink(nameClick);
+            MultiActionTextView.setSpannableText(update_color_sentence_view,
+                    stringBuilder, Color.RED);
+
+        }
+
+    }
 
     private void start() {
         try {
