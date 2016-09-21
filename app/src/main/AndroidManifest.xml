@@ -51,8 +51,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.QuestionAnswer_OnlineCloudActivity"
-            android:screenOrientation="portrait"></activity>
-
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Paragraph_OnlineCloudActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

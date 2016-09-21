@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.singsound.singsounddemo.activity.Article_OnlineCloudActivity;
 import com.singsound.singsounddemo.activity.Choice_OnlineCloudActivity;
+import com.singsound.singsounddemo.activity.Paragraph_OnlineCloudActivity;
 import com.singsound.singsounddemo.activity.QuestionAnswer_OnlineCloudActivity;
 import com.singsound.singsounddemo.activity.Sentence_OnlineCloudActivity;
 import com.singsound.singsounddemo.adapter.GridViewAdapter;
@@ -44,7 +45,7 @@ public class CloudFragment extends Fragment {
             R.mipmap.bankaifang,
             R.mipmap.article};
     //title
-    private String[] iconName = {"单词跟读", "句子跟读", "模仿跟读", "选择题测评", "问答题测评", "口头作文测评"};
+    private String[] iconName = {"单词跟读", "句子跟读", "段落朗读", "选择题测评", "问答题测评", "口头作文测评"};
 
     private List<Map<String, Object>> data_list = new ArrayList<>();
 
@@ -81,7 +82,8 @@ public class CloudFragment extends Fragment {
                         startActivity(getActivity(), Sentence_OnlineCloudActivity.class, iconName[1]);
                         break;
                     case 2:
-                        Toast.makeText(getActivity(), "正在开发...", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "正在开发...", Toast.LENGTH_SHORT).show();
+                        startActivity(getActivity(), Paragraph_OnlineCloudActivity.class, iconName[2]);
                         break;
                     case 3:
                         startActivity(getActivity(), Choice_OnlineCloudActivity.class, iconName[3]);
