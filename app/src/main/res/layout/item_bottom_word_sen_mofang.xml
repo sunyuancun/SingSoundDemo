@@ -11,10 +11,24 @@
         android:layout_height="wrap_content"
         android:visibility="invisible">
 
+
+        <TextView
+            android:id="@+id/update_color_sentence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+
         <TextView
             android:id="@+id/result"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/update_color_sentence"
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="测评结果" />

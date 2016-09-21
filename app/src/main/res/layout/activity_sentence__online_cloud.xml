@@ -24,6 +24,8 @@ tools:context=".activity.Word_OnlineCloudActivity">
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true">
 
+
+
     <include layout="@layout/item_bottom_word_sen_mofang"></include>
 </RelativeLayout>
 </RelativeLayout>

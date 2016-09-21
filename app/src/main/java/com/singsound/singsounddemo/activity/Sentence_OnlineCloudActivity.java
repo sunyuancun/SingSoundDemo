@@ -1,8 +1,10 @@
 package com.singsound.singsounddemo.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +24,8 @@ import com.singsound.singsounddemo.bean.SentenceDetail;
 import com.singsound.singsounddemo.utils.TitleBarUtil;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderDialog;
 import com.singsound.singsounddemo.utils.audiodialog.AudioRecoderUtils;
+import com.singsound.singsounddemo.utils.multiaction_textview.InputObject;
+import com.singsound.singsounddemo.utils.multiaction_textview.MultiActionTextView;
 import com.tt.SingEngine;
 
 import org.json.JSONArray;
@@ -40,7 +44,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     private List<View> viewList = new ArrayList<>();
 
     RelativeLayout result_view;
-    TextView zongfenview, wanzhengview, liuliview, zhunqueview;
+    TextView zongfenview, wanzhengview, liuliview, zhunqueview, update_color_sentence_view;
     Button button_word, button_replay;
     LinearLayout line_wanzheng, line_zhunque, line_liuli;
 
@@ -48,11 +52,6 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
     private AudioRecoderUtils mRecoderUtils;
 
     int mPosition = 0;
-    public static UpdateOnlineSentenceCallBack mUpdateOnlineSentenceCallBack;
-
-    public interface UpdateOnlineSentenceCallBack {
-        void UpdateOnlineSentence(Context context, int position,String[] sentences, List<SentenceDetail> list);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +78,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
         mRecoderDialog.setShowAlpha(0.98f);
 
         result_view = (RelativeLayout) findViewById(R.id.result_view);
+        update_color_sentence_view = (TextView) findViewById(R.id.update_color_sentence);
         button_word = (Button) findViewById(R.id.bt_word);
         button_word.setOnTouchListener(this);
         button_replay = (Button) findViewById(R.id.bt_replay);
@@ -283,12 +283,47 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                 sentenceDetailList.add(i, sentenceDetail);
             }
 
-            mUpdateOnlineSentenceCallBack.UpdateOnlineSentence(this, mPosition, sentences,sentenceDetailList);
+            update_color_sentenceView(sentenceDetailList);
 
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("---SentenceDetail---", "error    json  parson  error");
         }
+    }
+
+
+    //   textview  显示多种颜色设置
+
+    public void update_color_sentenceView(List<SentenceDetail> list) {
+        update_color_sentence_view.setVisibility(View.VISIBLE);
+        int startSpan = 0;
+        int endSpan = 0;
+        String str = "";
+        double s_sore;
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            startSpan = str.length();
+            str = str + list.get(i).getCharX() + " ";
+            s_sore = list.get(i).getScore();
+            endSpan = str.length();
+            stringBuilder.append(list.get(i).getCharX() + " ");
+
+            InputObject nameClick = new InputObject();
+            nameClick.setStartSpan(startSpan);
+            nameClick.setEndSpan(endSpan);
+            nameClick.setStringBuilder(stringBuilder);
+            if (s_sore < 50)
+                nameClick.setTextColor(Color.RED);
+            else if (s_sore >= 50 && s_sore < 70)
+                nameClick.setTextColor(Color.YELLOW);
+            else if (s_sore >= 70 && s_sore < 100)
+                nameClick.setTextColor(Color.GREEN);
+            MultiActionTextView.addActionOnTextViewWithoutLink(nameClick);
+            MultiActionTextView.setSpannableText(update_color_sentence_view,
+                    stringBuilder, Color.RED);
+
+        }
+
     }
 
 

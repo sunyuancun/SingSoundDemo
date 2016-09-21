@@ -24,7 +24,7 @@
         <TextView
             android:id="@+id/word"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:background="@drawable/viewpager_item_background"
             android:gravity="center"
             android:paddingLeft="5dp"
@@ -33,10 +33,5 @@
             android:textColor="@color/background_viewpager_item_word"
             android:textSize="18sp" />
 
-        <LinearLayout
-            android:id="@+id/line"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>
