@@ -316,6 +316,8 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
                 nameClick.setTextColor(getResources().getColor(R.color.text_yellow));
             else if (s_sore >= 70 && s_sore <= 100)
                 nameClick.setTextColor(getResources().getColor(R.color.text_green));
+            else
+                nameClick.setTextColor(getResources().getColor(R.color.text_red));
             MultiActionTextView.addActionOnTextViewWithoutLink(nameClick);
             MultiActionTextView.setSpannableText(update_color_sentence_view,
                     stringBuilder, Color.RED);
