@@ -82,8 +82,8 @@ public class CloudFragment extends Fragment {
                         startActivity(getActivity(), Sentence_OnlineCloudActivity.class, iconName[1]);
                         break;
                     case 2:
-//                        Toast.makeText(getActivity(), "正在开发...", Toast.LENGTH_SHORT).show();
-                        startActivity(getActivity(), Paragraph_OnlineCloudActivity.class, iconName[2]);
+                        Toast.makeText(getActivity(), "正在开发...", Toast.LENGTH_SHORT).show();
+//                        startActivity(getActivity(), Paragraph_OnlineCloudActivity.class, iconName[2]);
                         break;
                     case 3:
                         startActivity(getActivity(), Choice_OnlineCloudActivity.class, iconName[3]);
