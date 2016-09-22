@@ -229,7 +229,7 @@ public class Paragraph_OnlineCloudActivity extends BaseCloudActivity implements 
                                   e.printStackTrace();
                               }
 
-                              //todo  流利度    和句子的json格式有区别   fluency
+                              //todo  流利度    和句子的json格式有区别   fluency   bug待做
                               try {
                                   if (result.has("result")) {
                                       result_view.setVisibility(View.VISIBLE);
@@ -264,19 +264,23 @@ public class Paragraph_OnlineCloudActivity extends BaseCloudActivity implements 
     private void updateView(JSONObject result) {
         try {
             List<ParagraphDetail> paragraphDetailList = new ArrayList<>();
-            JSONArray details = result.getJSONObject("result").getJSONArray("details");
 
-            for (int i = 0; i < details.length(); i++) {
-                JSONObject detail = (JSONObject) details.get(i);
-                ParagraphDetail paragraphDetail = new ParagraphDetail();
-                String charx = detail.optString("text");
-                double score = detail.optDouble("score");
-                paragraphDetail.setText(charx);
-                paragraphDetail.setScore(score);
-                paragraphDetailList.add(i, paragraphDetail);
+            if (!result.has("error")) {
+
+                JSONArray details = result.getJSONObject("result").getJSONArray("details");
+
+                for (int i = 0; i < details.length(); i++) {
+                    JSONObject detail = (JSONObject) details.get(i);
+                    ParagraphDetail paragraphDetail = new ParagraphDetail();
+                    String charx = detail.optString("text");
+                    double score = detail.optDouble("score");
+                    paragraphDetail.setText(charx);
+                    paragraphDetail.setScore(score);
+                    paragraphDetailList.add(i, paragraphDetail);
+                }
+                mUpdateOnlineColorCallBack.UpdateOnlineColor(Paragraph_OnlineCloudActivity.this, mPosition, paragraphDetailList);
+
             }
-            mUpdateOnlineColorCallBack.UpdateOnlineColor(Paragraph_OnlineCloudActivity.this, mPosition, paragraphDetailList);
-
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("---SentenceDetail---", "error    json  parson  error");

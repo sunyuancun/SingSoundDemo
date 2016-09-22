@@ -79,6 +79,7 @@ public class ParagraphPagerAdapter extends PagerAdapter implements Paragraph_Onl
             nameClick.setStartSpan(startSpan);
             nameClick.setEndSpan(endSpan);
             nameClick.setStringBuilder(stringBuilder);
+
             if (s_sore < 50)
                 nameClick.setTextColor(context.getResources().getColor(R.color.text_red));
             else if (s_sore >= 50 && s_sore < 70)
@@ -87,6 +88,7 @@ public class ParagraphPagerAdapter extends PagerAdapter implements Paragraph_Onl
                 nameClick.setTextColor(context.getResources().getColor(R.color.text_green));
             else
                 nameClick.setTextColor(context.getResources().getColor(R.color.text_red));
+
             MultiActionTextView.addActionOnTextViewWithoutLink(nameClick);
             MultiActionTextView.setSpannableText(tv_word,
                     stringBuilder, Color.RED);
