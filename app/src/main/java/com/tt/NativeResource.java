@@ -1,6 +1,6 @@
 package com.tt;
 
-public class Nativesource {
+public class NativeResource {
 
     public static String vadResourceName = "vad.0.1.bin";
     public static String zipResourceName = "resource.zip";

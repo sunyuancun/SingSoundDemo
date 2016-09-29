@@ -142,7 +142,7 @@ public class SingEngine {
 
     public void setOpenVad(boolean b, String vadResourcename) {
         this.useVad = b;
-        if (b) Nativesource.vadResourceName = vadResourcename;
+        if (b) NativeResource.vadResourceName = vadResourcename;
     }
 
     public void setListener(ResultListener listenner) {
@@ -323,16 +323,16 @@ public class SingEngine {
 
     private String buildAvdPath() throws JSONException {
         if (avdLocalPath == null) {
-            avdLocalPath = AiUtil.getFilePathFromAssets(ct, Nativesource.vadResourceName);
+            avdLocalPath = AiUtil.getFilePathFromAssets(ct, NativeResource.vadResourceName);
         }
         return avdLocalPath;
     }
 
     private JSONObject buildNativePath() throws JSONException {
         if (local == null) {
-            local = AiUtil.unzipFile(ct, Nativesource.zipResourceName).toString();
+            local = AiUtil.unzipFile(ct, NativeResource.zipResourceName).toString();
         }
-        String res_path = String.format(Nativesource.native_zip_res_path, local, local);
+        String res_path = String.format(NativeResource.native_zip_res_path, local, local);
         return new JSONObject(res_path);
     }
 
