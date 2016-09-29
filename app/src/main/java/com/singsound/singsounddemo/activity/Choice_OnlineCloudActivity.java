@@ -251,6 +251,11 @@ public class Choice_OnlineCloudActivity extends BaseCloudActivity implements Vie
         setResult(result);
     }
 
+    @Override
+    protected void stopSingEngineSuccess() {
+
+    }
+
     private void setResult(final JSONObject result) {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -327,14 +332,12 @@ public class Choice_OnlineCloudActivity extends BaseCloudActivity implements Vie
 
     private void start() {
         try {
-            JSONObject cfg = mSingEngine.buildStartJson();
-            cfg.put("request",
-                    cfg.getJSONObject("request")
-                            .put("coreType", Config.TYPE_choc)
-                            .put("rank", 2)
-                            .put("precision", 1)
-                            .put("lm", jsonArray_current)
-            );
+            JSONObject request = new JSONObject();
+            request.put("coreType", Config.TYPE_choc)
+                    .put("rank", 2)
+                    .put("precision", 1)
+                    .put("lm", jsonArray_current);
+            JSONObject cfg = mSingEngine.buildStartJson(request);
             mSingEngine.setStartCfg(cfg);
             mSingEngine.start();
         } catch (Exception e) {

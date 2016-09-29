@@ -188,6 +188,18 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
         setResult(result);
     }
 
+    @Override
+    protected void stopSingEngineSuccess() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRecoderUtils.stopRecord();
+                mRecoderDialog.dismiss();
+                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
+            }
+        });
+    }
+
     private void setResult(final JSONObject result) {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -308,13 +320,15 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
 
     private void start() {
         try {
-            JSONObject cfg = mSingEngine.buildStartJson();
-            cfg.put("request",
-                    cfg.getJSONObject("request")
-                            .put("coreType", Config.TYPE_sent)
-                            .put("refText", mCurrentSentence)
-            );
-            mSingEngine.setStartCfg(cfg);
+            JSONObject request = new JSONObject();
+            request.put("coreType", Config.TYPE_sent);
+            request.put("refText", mCurrentSentence);
+            request.put("rank", 100);
+            //构建评测请求参数
+            JSONObject startCfg = mSingEngine.buildStartJson(request);
+            //设置评测请求参数
+            mSingEngine.setStartCfg(startCfg);
+            //开始测评
             mSingEngine.start();
         } catch (Exception e) {
             e.printStackTrace();

@@ -293,17 +293,17 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
 
     private void start() {
         try {
-            JSONObject cfg = mSingEngine.buildStartJson();
-            cfg.put("request",
-                    cfg.getJSONObject("request")
-                            .put("coreType", Config.TYPE_Question_answer)
-                            .put("rank", 100)
-                            .put("precision", 0.5)
-                            .put("key", mCurrentJson.getKey())
-                            .put("lm", mCurrentJson.getLm())
-                            .put("quest_ans", mCurrentJson.getQuest_ans())
-                            .put("para", mCurrentJson.getPara())
-            );
+
+            JSONObject request = new JSONObject();
+            request.put("coreType", Config.TYPE_Question_answer)
+                    .put("rank", 100)
+                    .put("precision", 0.5)
+                    .put("key", mCurrentJson.getKey())
+                    .put("lm", mCurrentJson.getLm())
+                    .put("quest_ans", mCurrentJson.getQuest_ans())
+                    .put("para", mCurrentJson.getPara());
+
+            JSONObject cfg = mSingEngine.buildStartJson(request);
             mSingEngine.setStartCfg(cfg);
             mSingEngine.start();
         } catch (Exception e) {
@@ -338,6 +338,11 @@ public class QuestionAnswer_OnlineCloudActivity extends BaseCloudActivity implem
     @Override
     protected void getResultFromServer(JSONObject result) {
         setResult(result);
+    }
+
+    @Override
+    protected void stopSingEngineSuccess() {
+
     }
 
     private void setResult(final JSONObject result) {

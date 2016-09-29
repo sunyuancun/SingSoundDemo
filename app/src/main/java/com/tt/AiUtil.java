@@ -20,6 +20,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class AiUtil {
+    private static String TAG = "AiUtil";
 
     /**
      * 计算字符串的SHA1值
@@ -170,7 +171,7 @@ public class AiUtil {
 
     /**
      * 从Assets 解压zip文件
-     * 
+     *
      * @return 解压后的目录
      */
     public static File unzipFile(Context c, String fileName) {
@@ -179,7 +180,7 @@ public class AiUtil {
 
             File filesDir = externalFilesDir(c);
             File targetDir = new File(filesDir, pureName);
-            System.out.println("--------"+filesDir);
+            System.out.println("--------" + filesDir);
             String md5sum = md5(c, fileName);
             File md5sumFile = new File(targetDir, ".md5sum");
 
@@ -199,7 +200,7 @@ public class AiUtil {
             return targetDir;
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(tag, "Failed to extract resource", e);
+            Log.e(tag, "Failed to find resource.zip, please check your assets", e);
         }
         return null;
     }
@@ -231,7 +232,7 @@ public class AiUtil {
 //            directory.delete();
 //        }
 //    }
-    
+
     private static void removeDirectory(File directory) {
         if (directory.isDirectory()) {
             File[] files = directory.listFiles();
@@ -240,13 +241,13 @@ public class AiUtil {
                     removeDirectory(files[i]);
                 }
                 // 修复删除的问题 http://blog.csdn.net/hwz2311245/article/details/47020655
-                final File to = new File(files[i].getAbsolutePath() + System.currentTimeMillis());  
-                files[i].renameTo(to);  
+                final File to = new File(files[i].getAbsolutePath() + System.currentTimeMillis());
+                files[i].renameTo(to);
                 to.delete();
 //                files[i].delete();
             }
-            final File to = new File(directory.getAbsolutePath() + System.currentTimeMillis());  
-            directory.renameTo(to);  
+            final File to = new File(directory.getAbsolutePath() + System.currentTimeMillis());
+            directory.renameTo(to);
             to.delete();
 //            directory.delete();
         }
@@ -259,7 +260,7 @@ public class AiUtil {
         }
         return targetDir;
     }
-    
+
     private static void unzip(Context c, String fileName, File targetDir)
             throws IOException {
         InputStream is = c.getAssets().open(fileName);
@@ -288,5 +289,31 @@ public class AiUtil {
         }
         zis.close();
         is.close();
+    }
+
+    public static String getFilePathFromAssets(Context context, String name) {
+        try {
+            File targetFile = new File(getFilesDir(context), name);
+            copyInputStreamToFile(context.getAssets().open(name), targetFile);
+            return targetFile.getAbsolutePath();
+        } catch (Exception e) {
+            Log.e(TAG, "failed to open vadbin resource from assets， please check your assets.", e);
+        }
+
+        return null;
+    }
+
+    private static void copyInputStreamToFile(InputStream is, File file)
+            throws Exception {
+        int bytes;
+        byte[] buf = new byte[BUFFER_SIZE];
+
+        FileOutputStream fos = new FileOutputStream(file);
+        while ((bytes = is.read(buf, 0, BUFFER_SIZE)) > 0) {
+            fos.write(buf, 0, bytes);
+        }
+
+        is.close();
+        fos.close();
     }
 }

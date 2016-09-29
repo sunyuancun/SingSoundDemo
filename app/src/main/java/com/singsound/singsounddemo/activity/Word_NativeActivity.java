@@ -57,7 +57,6 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
                 return true;
 
             case MotionEvent.ACTION_UP:
-
                 Log.d("-----------------", "UP");
                 button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
                 mRecoderUtils.stopRecord();
@@ -171,6 +170,19 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
         setResult(result);
     }
 
+    @Override
+    protected void stopSingEngineSuccess() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("-----------------", "UP");
+                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
+                mRecoderUtils.stopRecord();
+                mRecoderDialog.dismiss();
+            }
+        });
+    }
+
     private void setResult(final JSONObject result) {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -222,12 +234,11 @@ public class Word_NativeActivity extends BaseNativeActivity implements View.OnCl
 
     private void start() {
         try {
-            JSONObject cfg = mSingEngine.buildStartJson();
-            cfg.put("request",
-                    cfg.getJSONObject("request")
-                            .put("coreType", Config.TYPE_Word)
-                            .put("refText", mCurrentWord)
-            );
+            JSONObject request = new JSONObject();
+            request.put("coreType", Config.TYPE_Word)
+                    .put("refText", mCurrentWord)
+                    .put("rank", 100);
+            JSONObject cfg = mSingEngine.buildStartJson(request);
             mSingEngine.setStartCfg(cfg);
             mSingEngine.start();
         } catch (Exception e) {

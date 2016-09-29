@@ -148,13 +148,12 @@ public class Paragraph_OnlineCloudActivity extends BaseCloudActivity implements 
 
     private void start() {
         try {
-            JSONObject cfg = mSingEngine.buildStartJson();
-            cfg.put("request",
-                    cfg.getJSONObject("request")
-                            .put("coreType", Config.TYPE_Paragraph)
-                            .put("refText", mCurrentPara)
-                            .put("precision", 0.5)
-            );
+            JSONObject request = new JSONObject();
+            request.put("coreType", Config.TYPE_Paragraph)
+                    .put("refText", mCurrentPara)
+                    .put("rank", 100)
+                    .put("precision", 0.5);
+            JSONObject cfg = mSingEngine.buildStartJson(request);
             mSingEngine.setStartCfg(cfg);
             mSingEngine.start();
         } catch (Exception e) {
@@ -169,6 +168,11 @@ public class Paragraph_OnlineCloudActivity extends BaseCloudActivity implements 
     @Override
     protected void getResultFromServer(JSONObject result) {
         setResult(result);
+    }
+
+    @Override
+    protected void stopSingEngineSuccess() {
+
     }
 
     private void setResult(final JSONObject result) {

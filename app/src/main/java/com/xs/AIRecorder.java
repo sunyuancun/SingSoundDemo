@@ -43,8 +43,8 @@ public class AIRecorder {
 
     public volatile boolean running = false;
 
-    public static interface Callback {
-        public void run(byte[] data, int size);
+    public interface Callback {
+        void run(byte[] data, int size);
     }
 
     public static AIRecorder getInstance() {
@@ -53,7 +53,6 @@ public class AIRecorder {
         return instance;
     }
 
-    //    recorder.setOutputFormat
     private AIRecorder() {
 
         this.fileHeader = true;
@@ -84,7 +83,7 @@ public class AIRecorder {
         this.fileHeader = isheader;
     }
 
-    public int start(final String path, final Callback callback, final int vadBacktime, final int vadFronttime) {
+    public int start(final String path, final Callback callback) {
 
         stop();
         this.path = path;
@@ -120,11 +119,6 @@ public class AIRecorder {
                         }
                     }
 
-                    double[] vadOutput;
-                    int framelen = CHANNELS * FREQUENCY * BITS / 1000 / 8;
-                    int frame = 0;
-                    int frameTimeout = 0;
-
                     while (true) {
                         if (!running || recorder.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
                             recorder.stop(); // FIXME elapse 400ms
@@ -132,24 +126,8 @@ public class AIRecorder {
                         }
 
                         int size = recorder.read(buffer, 0, buffer.length);
-                        if (size > 0) {
-                            frame += size;
-                            if (frame / framelen > vadFronttime) {
-                                vadOutput = vad.removeSilence(getDoubleArray(buffer, BITS), FREQUENCY);
-                                if (vadOutput.length > 0) {
-                                    frameTimeout = 0;
-                                } else {
-                                    frameTimeout += size;
-//                                    Log.d(TAG, "vad:" + frameTimeout / framelen);
-                                }
-                                if (frameTimeout / framelen > vadBacktime) {
-//                                    Log.d(TAG, "vad timeout");
-                                    //recorder.stop();
-                                    callback.run(buffer, -1);
-                                    break;
-                                }
-                            }
 
+                        if (size > 0) {
                             if (callback != null) {
                                 callback.run(buffer, size);
                             }

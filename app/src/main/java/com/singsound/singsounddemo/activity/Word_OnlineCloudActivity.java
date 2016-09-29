@@ -63,7 +63,6 @@ public class Word_OnlineCloudActivity extends BaseCloudActivity implements View.
 
     @Override
     public void onUpdate(double db) {
-        Log.e("-----------------", "update");
         if (null != mRecoderDialog) {
             mRecoderDialog.setLevel((int) db);
         }
@@ -162,6 +161,18 @@ public class Word_OnlineCloudActivity extends BaseCloudActivity implements View.
     }
 
     @Override
+    protected void stopSingEngineSuccess() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRecoderUtils.stopRecord();
+                mRecoderDialog.dismiss();
+                button_word.setBackgroundResource(R.drawable.shape_recoder_btn_normal);
+            }
+        });
+    }
+
+    @Override
     protected void getResultFromServer(JSONObject result) {
         setResult(result);
     }
@@ -219,12 +230,11 @@ public class Word_OnlineCloudActivity extends BaseCloudActivity implements View.
 
     private void start() {
         try {
-            JSONObject cfg = mSingEngine.buildStartJson();
-            cfg.put("request",
-                    cfg.getJSONObject("request")
-                            .put("coreType", Config.TYPE_Word)
-                            .put("refText", mCurrentWord)
-            );
+            JSONObject request = new JSONObject();
+            request.put("coreType", Config.TYPE_Word)
+                    .put("refText", mCurrentWord)
+                    .put("rank", 100);
+            JSONObject cfg = mSingEngine.buildStartJson(request);
             mSingEngine.setStartCfg(cfg);
             mSingEngine.start();
         } catch (Exception e) {

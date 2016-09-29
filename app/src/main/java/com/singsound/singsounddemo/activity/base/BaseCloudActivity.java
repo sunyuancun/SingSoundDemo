@@ -69,14 +69,19 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
             public void run() {
                 try {
                     // 1 获取引擎实例
-                    engine = SingEngine.newInstance(BaseCloudActivity.this, BaseCloudActivity.this, null);
-                    // 2. 设置引擎类型    cloud ：云端    native： 离线     auto： 云端优先，无网络状态native
+                    engine = SingEngine.newInstance(BaseCloudActivity.this);
+                    // 2 设置测评监听对象
+                    engine.setListener(BaseCloudActivity.this);
+                    // 3 设置引擎类型
                     engine.setServerType("cloud");
-//                    engine.setServerType("auto");
-                    // 3 构建引擎初始化参数
-                    JSONObject cfg_init = engine.buildInitJson();
+                    // 4 设置是否开启VAD功能
+//                    engine.setOpenVad(false, null);
+//                    engine.setOpenVad(true, "vad.0.1.bin");
+                    // 5  构建引擎初始化参数
+                    JSONObject cfg_init = engine.buildInitJson(null, null);
+                    // 6  设置引擎初始化参数
                     engine.setNewCfg(cfg_init);
-                    // 4 创建 对象   回调 OnReady（）；
+                    // 7  引擎初始化
                     engine.newEngine();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,6 +129,9 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
     // 获取评测结果
     protected abstract void getResultFromServer(JSONObject result);
 
+    // vad状态变化关闭引擎监听
+    protected abstract void stopSingEngineSuccess();
+
     @Override
     public void onBegin() {
 
@@ -138,10 +146,11 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
     @Override
     public void onEnd(int Code, String msg) {
         Log.d("----------------", "onEnd:[" + Code + "]" + msg);
-        if (Code != 0 && engine != null && initSingEngine) {
-//            engine.stop();
-        }
+//        if (Code == 0 && engine != null && initSingEngine) {
+//            stopSingEngineSuccess();
+//        }
     }
+
 
     @Override
     public void onUpdateVolume(int volume) {
@@ -150,7 +159,7 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
 
     @Override
     public void onVadTimeOut() {
-
+        stopSingEngineSuccess();
     }
 
     @Override

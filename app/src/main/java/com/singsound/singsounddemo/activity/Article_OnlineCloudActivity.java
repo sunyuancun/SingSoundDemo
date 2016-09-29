@@ -181,6 +181,11 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
         setResult(result);
     }
 
+    @Override
+    protected void stopSingEngineSuccess() {
+
+    }
+
     private void setResult(final JSONObject result) {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -205,14 +210,13 @@ public class Article_OnlineCloudActivity extends BaseCloudActivity implements Vi
 
     private void start() {
         try {
-            JSONObject cfg = mSingEngine.buildStartJson();
-            cfg.put("request",
-                    cfg.getJSONObject("request")
-                            .put("coreType", Config.TYPE_pic_article)
-                            .put("rank", 100)
-                            .put("precision", 0.5)
-                            .put("lm", mCurrentJSONArray)
-            );
+            JSONObject request = new JSONObject();
+            request.put("coreType", Config.TYPE_pic_article)
+                    .put("rank", 100)
+                    .put("precision", 0.5)
+                    .put("lm", mCurrentJSONArray);
+
+            JSONObject cfg = mSingEngine.buildStartJson(request);
             mSingEngine.setStartCfg(cfg);
             mSingEngine.start();
         } catch (Exception e) {

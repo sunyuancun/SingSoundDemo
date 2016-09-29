@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class SingEngine {
+
+
     /**
      * 回调接口
      */
@@ -105,22 +107,27 @@ public class SingEngine {
     private JSONObject newCfg = null;
     private JSONObject startCfg = null;
     private String local = null;
+    private String avdLocalPath = null;
     private coreProvideType cpt = coreProvideType.CLOUD;
-    private int vadBacktime = 3000;
-    private int vadFronttime = 3000;
+    private boolean useVad = false;
 
     private String wavPath = "";
 
+    public static SingEngine fragment;
 
     public SingEngine(Context context) {
         ct = context;
     }
 
-    public static SingEngine newInstance(Context context, ResultListener listener, String Resource) {
-        SingEngine fragment = new SingEngine(context);
-        fragment.setListener(listener);
-        fragment.setLocal(Resource);
+    public static synchronized SingEngine newInstance(Context context) {
+        if (fragment == null) {
+            fragment = new SingEngine(context);
+        }
         return fragment;
+    }
+
+    public String getVersion() {
+        return "0.1.0";
     }
 
     public void setServerType(String type) {
@@ -133,8 +140,13 @@ public class SingEngine {
         }
     }
 
-    public String getVersion() {
-        return "0.1.0";
+    public void setOpenVad(boolean b, String vadResourcename) {
+        this.useVad = b;
+        if (b) Nativesource.vadResourceName = vadResourcename;
+    }
+
+    public void setListener(ResultListener listenner) {
+        caller = listenner;
     }
 
     public String getWavPath() {
@@ -145,74 +157,44 @@ public class SingEngine {
         recorder.setFileheader(isheader);
     }
 
-    public void setServerType(coreProvideType type) {
-        cpt = type;
-    }
-
-    public void setLocal(String Resource) {
-        local = Resource;
-    }
-
-    public void setVadBackTime(int time) {
-        vadBacktime = time;
-    }
-
-    public void setVadFrontTime(int time) {
-        vadFronttime = time;
-    }
-
-    public void setListener(ResultListener listenner) {
-        caller = listenner;
-    }
-
-
     //=================================================================================================
-
 
     public void setNewCfg(JSONObject cfg) {
         newCfg = cfg;
     }
 
-    /**
-     * ===在这设置引擎服务器 api====
-     *
-     * @return JSONObject
-     * @throws JSONException
-     */
-    public JSONObject buildInitJson() throws JSONException {
+    public JSONObject buildInitJson(String appKey, String secretKey) throws JSONException {
         JSONObject cfg = new JSONObject();
         JSONObject cloud = new JSONObject();
         String serverAPI = "ws://api.cloud.ssapi.cn:8080";
+
         cloud.put("enable", 1)
 //                .put("server", serverAPI)
                 .put("server", "ws://120.92.133.98:8090")
                 .put("connectTimeout", 20)
                 .put("serverTimeout", 60);
 
-        cfg.put("appKey", "1459219202000001")
-                .put("secretKey", "3bc23f814868ebd5b61a71acde532abb")
-//                .put("native", buildNative())
+        cfg.put("appKey", appKey != null ? appKey : "1459219202000001")
+                .put("secretKey", secretKey != null ? secretKey : "3bc23f814868ebd5b61a71acde532abb")
                 .put("cloud", cloud);
 
         return cfg;
     }
 
-    public void setStartCfg(JSONObject cfg) {
+    public void setStartCfg(JSONObject cfg) throws JSONException {
         startCfg = cfg;
     }
 
-    public JSONObject buildStartJson() throws JSONException {
+    public JSONObject buildStartJson(JSONObject request) throws JSONException {
         JSONObject cfg = new JSONObject();
-
-        JSONObject request = new JSONObject();
-        request.put("coreType", coreType.enSent.getValue())
-                .put("refText", "")
-                .put("rank", 100);
         JSONObject audio = new JSONObject();
+
         audio.put("audioType", "wav")
                 .put("sampleRate", 16000)
                 .put("sampleBytes", 2)
                 .put("channel", 1);
+
+
         cfg.put("coreProvideType", cpt.getValue())
                 .put("app", new JSONObject("{\"userId\": \"guest\"}"))
                 .put("audio", audio)
@@ -221,18 +203,11 @@ public class SingEngine {
         return cfg;
     }
 
-    private JSONObject buildNative() throws JSONException {
-        if (local == null) {
-            local = AiUtil.unzipFile(ct, nativesource.nativeZIPResource).toString();
-        }
-        String res_path = String.format(nativesource.native_zip_res_path, local, local);
-        return new JSONObject(res_path);
-    }
-
     public void newEngine() throws JSONException {
-        if (cpt != coreProvideType.CLOUD && !newCfg.has("native")) {
-            newCfg.put("native", buildNative());
-        }
+        buildNativeInitJson();
+        buildAvdInitJson();
+        log("NewCfg" + newCfg.toString());
+
         engine = SSound.ssound_new(newCfg.toString(), ct);
         if (engine == 0) caller.onEnd(60001, "please check param");
 
@@ -241,7 +216,11 @@ public class SingEngine {
     }
 
     public int SSoundStart(byte[] rid) {
-        selecteEngineServerTypeWhenAutoType();
+        checkServerTypeWhenAutoType();
+        buildAvdStartJson();
+
+        log("StartCfg" + startCfg.toString());
+
         int r = SSound.ssound_start(engine, startCfg.toString(), rid, new SSound.ssound_callback() {
             @Override
             public int run(byte[] id, int type, byte[] data, int size) {
@@ -249,8 +228,15 @@ public class SingEngine {
                     final String result = new String(data, 0, size).trim();
                     try {
                         final JSONObject json = new JSONObject(result);
-                        caller.onResult(json);
-                        caller.onEnd(0, "");
+                        if (json.has("vad_status") || json.has("sound_intensity")) {
+                            if (json.optInt("vad_status") == 2 && recorder.running) {
+                                caller.onVadTimeOut();    //监听到没有录音  自动stop
+                                stop();
+                            }
+                        } else {
+                            caller.onEnd(0, "");
+                            caller.onResult(json);         //返回测评结果json
+                        }
                     } catch (JSONException e) {
                         caller.onEnd(70001, "server result string error: " + result);
                         e.printStackTrace();
@@ -289,12 +275,9 @@ public class SingEngine {
                     if (rr != 0) {
                         stop();
                     }
-                } else if (size == -1) {
-                    Log.d("vad:", "vad time callback");
-                    caller.onVadTimeOut();
                 }
             }
-        }, vadBacktime, vadFronttime);
+        });
         if (r != 0) {
             caller.onEnd(70004, "AIRecorder start error");
         }
@@ -304,8 +287,11 @@ public class SingEngine {
 
     public void stop() {
         int r;
+
         r = SSound.ssound_stop(engine);
-        if (r != 0) caller.onEnd(70002, "engine stop error");
+        if (r != 0) {
+            caller.onEnd(70002, "engine stop error");
+        }
 
         r = recorder.stop();
         if (r != 0) {
@@ -334,15 +320,84 @@ public class SingEngine {
         }
     }
 
-    public void log(String s) {
-        Log.e("SingEngine", s);
+
+    private String buildAvdPath() throws JSONException {
+        if (avdLocalPath == null) {
+            avdLocalPath = AiUtil.getFilePathFromAssets(ct, Nativesource.vadResourceName);
+        }
+        return avdLocalPath;
     }
 
+    private JSONObject buildNativePath() throws JSONException {
+        if (local == null) {
+            local = AiUtil.unzipFile(ct, Nativesource.zipResourceName).toString();
+        }
+        String res_path = String.format(Nativesource.native_zip_res_path, local, local);
+        return new JSONObject(res_path);
+    }
+
+    private void buildNativeInitJson() throws JSONException {
+        if (cpt != coreProvideType.CLOUD && !newCfg.has("native")) {
+            newCfg.put("native", buildNativePath());
+        }
+    }
+
+    private void buildAvdInitJson() {
+        try {
+            if (useVad) {
+                JSONObject vad = new JSONObject();
+                vad.put("enable", 1).put("res", buildAvdPath());
+                newCfg.put("vad", vad);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void buildAvdStartJson() {
+        try {
+            if (useVad) {
+                // vad仅支持单词句子
+                String coreTypeString = startCfg.optJSONObject("request").optString("coreType");
+                if (coreTypeString != null && (coreTypeString.equals(coreType.enWord.getValue())
+                        || coreTypeString.equals(coreType.enSent.getValue()))) {
+                    JSONObject vad = new JSONObject();
+                    vad.put("vadEnable", 1);
+                    startCfg.put("vad", vad);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 设置Auto模式时动态切换引擎Type ， 有网cloud ，没网native
+     */
+    private void checkServerTypeWhenAutoType() {
+        try {
+            if (cpt != coreProvideType.AUTO) {
+                return;
+            }
+
+            if (!NetWorkUtil.getInstance().isConnected(ct)) {
+                startCfg.put("coreProvideType", coreProvideType.NATIVE.getValue());
+            } else {
+                startCfg.put("coreProvideType", coreProvideType.CLOUD.getValue());
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void log(String s) {
+        Log.d("SingEngine", s);
+    }
 
     /**
      * 离线WAV 文件评测
-     *
-     * @param wavName
      */
     public void startWithPCM(String wavName) {
         byte[] rid = new byte[64];
@@ -371,8 +426,6 @@ public class SingEngine {
 
     /**
      * 离线 MP3 文件评测
-     *
-     * @param MP3Name
      */
     public void startWithLocalMP3(String MP3Name) {
         byte[] rid = new byte[64];
@@ -395,23 +448,4 @@ public class SingEngine {
 
     }
 
-    /**
-     * 设置Auto模式时动态切换引擎Type
-     */
-    private void selecteEngineServerTypeWhenAutoType() {
-        try {
-            if (cpt != coreProvideType.AUTO) {
-                return;
-            }
-
-            if (!NetWorkUtil.getInstance().isConnected(ct)) {
-                startCfg.put("coreProvideType", coreProvideType.NATIVE.getValue());
-            } else {
-                startCfg.put("coreProvideType", coreProvideType.CLOUD.getValue());
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -71,13 +71,16 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
             public void run() {
                 try {
                     // 1 获取引擎实例
-                    engine = SingEngine.newInstance(BaseNativeActivity.this, BaseNativeActivity.this, null);
+                    engine = SingEngine.newInstance(BaseNativeActivity.this);
+                    engine.setListener(BaseNativeActivity.this);
                     // 2. 设置引擎类型  cloud ：云端    native： 离线     auto： 云端优先，无网络状态native
                     engine.setServerType("native");
-                    // 3 构建引擎初始化参数
-                    JSONObject cfg_init = engine.buildInitJson();
+                    // 3. 是否开启vad功能
+                    engine.setOpenVad(false,null);
+                    // 4 构建引擎初始化参数
+                    JSONObject cfg_init = engine.buildInitJson(null,null);
                     engine.setNewCfg(cfg_init);
-                    // 4 创建 对象   回调 OnReady（）；
+                    // 5 创建 对象   回调 OnReady（）；
                     engine.newEngine();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -125,6 +128,9 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
     // 获取评测结果
     protected abstract void getResultFromServer(JSONObject result);
 
+    // vad状态变化关闭引擎监听
+    protected abstract void stopSingEngineSuccess();
+
     @Override
     public void onBegin() {
 
@@ -139,9 +145,9 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
     @Override
     public void onEnd(int Code, String msg) {
         Log.d("----------------", "onEnd:[" + Code + "]" + msg);
-        if (Code != 0 && engine != null && initSingEngine) {
-//            engine.stop();
-        }
+//        if (Code == 0 && engine != null && initSingEngine) {
+//            stopSingEngineSuccess();
+//        }
     }
 
     @Override
@@ -151,8 +157,9 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
 
     @Override
     public void onVadTimeOut() {
-
+        stopSingEngineSuccess();
     }
+
 
     @Override
     public void onRecordingBuffer(byte[] data) {
