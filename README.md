@@ -8,4 +8,6 @@
 serverType：    cloud    native    auto
 
 
+showDoc  ： singsound     singsound
+
 
