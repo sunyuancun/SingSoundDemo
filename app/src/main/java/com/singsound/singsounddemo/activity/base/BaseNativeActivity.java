@@ -77,7 +77,7 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
                     engine.setServerType("native");
                     // 3. 是否开启vad功能
                     engine.setOpenVad(false, null);
-                    //开启离线资源检查功能  （不建议）
+                    //开启离线资源检查功能
 //                    engine.setOpenCheckResource(true);
                     // 4 构建引擎初始化参数
                     JSONObject cfg_init = engine.buildInitJson(null, null);

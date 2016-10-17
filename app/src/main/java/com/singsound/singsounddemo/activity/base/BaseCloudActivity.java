@@ -77,7 +77,7 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
                     // 4 设置是否开启VAD功能
 //                    engine.setOpenVad(false, null);
                     engine.setOpenVad(true, "vad.0.1.bin");
-                    //开启离线资源检查功能  （不建议）
+                    //开启离线资源检查功能
                     engine.setOpenCheckResource(true);
                     // 5  构建引擎初始化参数
                     JSONObject cfg_init = engine.buildInitJson(null, null);
