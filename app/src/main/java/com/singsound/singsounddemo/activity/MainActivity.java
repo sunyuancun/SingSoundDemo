@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
                         SPUtils.put(MainActivity.this, SPUtils.SERVER_API_SELECTED_POSITION, which);
                     }
                 });
-
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
