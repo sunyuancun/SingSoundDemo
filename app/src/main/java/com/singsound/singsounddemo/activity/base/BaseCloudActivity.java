@@ -73,10 +73,12 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
                     // 2 设置测评监听对象
                     engine.setListener(BaseCloudActivity.this);
                     // 3 设置引擎类型
-                    engine.setServerType("cloud");
+                    engine.setServerType("auto");
                     // 4 设置是否开启VAD功能
-                    engine.setOpenVad(false, null);
-//                    engine.setOpenVad(true, "vad.0.1.bin");
+//                    engine.setOpenVad(false, null);
+                    engine.setOpenVad(true, "vad.0.1.bin");
+                    //开启离线资源检查功能  （不建议）
+                    engine.setOpenCheckResource(true);
                     // 5  构建引擎初始化参数
                     JSONObject cfg_init = engine.buildInitJson(null, null);
                     // 6  设置引擎初始化参数
