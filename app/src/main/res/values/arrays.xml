@@ -15,4 +15,9 @@
         <item>句子跟读</item>
     </string-array>
 
+    <string-array name="server_api">
+        <item>ws://api.cloud.ssapi.cn:8080</item>
+        <item>ws://trial.cloud.ssapi.cn:8090</item>
+    </string-array>
+
 </resources>

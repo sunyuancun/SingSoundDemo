@@ -1,21 +1,20 @@
 package com.singsound.singsounddemo.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.singsound.singsounddemo.R;
 import com.singsound.singsounddemo.fragment.CloudFragment;
 import com.singsound.singsounddemo.fragment.NativeFragment;
+import com.singsound.singsounddemo.utils.SPUtils;
 import com.singsound.singsounddemo.utils.StateColorUtils;
 import com.singsound.singsounddemo.utils.TitleBar;
 import com.singsound.singsounddemo.utils.tabview.TabView;
@@ -26,6 +25,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int savedPosition = 0;
     CloudFragment cloudFragment;
     NativeFragment nativeFragment;
     TabView tabView;
@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTitle() {
+
+
         final TitleBar titleBar = (TitleBar) findViewById(R.id.title_bar);
         titleBar.setImmersive(true);
         titleBar.setBackgroundColor(Color.parseColor("#30809f"));
@@ -70,6 +72,28 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intent);
             }
         });
+
+        titleBar.setLeftText("设置IP");
+        titleBar.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savedPosition = (int)SPUtils.get(MainActivity.this,SPUtils.SERVER_API_SELECTED_POSITION,0);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setSingleChoiceItems(R.array.server_api, savedPosition, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ListView lw = ((AlertDialog) dialog).getListView();
+                        // which表示点击的条目
+                        Object checkedItem = lw.getAdapter().getItem(which);
+                        SPUtils.put(MainActivity.this, SPUtils.SERVER_API, checkedItem.toString());
+                        SPUtils.put(MainActivity.this, SPUtils.SERVER_API_SELECTED_POSITION, which);
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
     private void initUI() {
@@ -92,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public  int dip2px(float dpValue)
-    {
+    public int dip2px(float dpValue) {
         final float scale = getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }

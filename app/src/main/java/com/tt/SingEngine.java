@@ -3,6 +3,7 @@ package com.tt;
 import android.content.Context;
 import android.util.Log;
 
+import com.singsound.singsounddemo.utils.SPUtils;
 import com.xs.AIRecorder;
 
 import org.json.JSONException;
@@ -172,9 +173,9 @@ public class SingEngine {
         JSONObject cfg = new JSONObject();
         JSONObject cloud = new JSONObject();
         String serverAPI = "ws://api.cloud.ssapi.cn:8080";
-        String testAPI = "ws://trial.cloud.ssapi.cn:8080";
+//        String testAPI = "ws://trial.cloud.ssapi.cn:8090";
         cloud.put("enable", 1)
-                .put("server", serverAPI)
+                .put("server", SPUtils.get(ct,SPUtils.SERVER_API,serverAPI))
                 .put("connectTimeout", 20)
                 .put("serverTimeout", 60);
 
@@ -335,9 +336,9 @@ public class SingEngine {
 
     private String buildAvdPath() throws JSONException {
 
-        if (needCheckInitResource){
+        if (needCheckInitResource) {
             avdLocalPath = AiUtil.getFilePathFromAssets(ct, NativeResource.vadResourceName);
-        }else{
+        } else {
             if (avdLocalPath == null) {
                 avdLocalPath = AiUtil.getFilePathFromAssets(ct, NativeResource.vadResourceName);
             }
@@ -348,9 +349,9 @@ public class SingEngine {
 
     private JSONObject buildNativePath() throws JSONException {
 
-        if (needCheckInitResource){
+        if (needCheckInitResource) {
             local = AiUtil.unzipFile(ct, NativeResource.zipResourceName).toString();
-        }else{
+        } else {
             if (local == null) {
                 local = AiUtil.unzipFile(ct, NativeResource.zipResourceName).toString();
             }
