@@ -110,6 +110,7 @@ public class SingEngine {
     private String avdLocalPath = null;
     private coreProvideType cpt = coreProvideType.CLOUD;
     private boolean useVad = false;
+    private boolean needCheckInitResource = false;
 
     private String wavPath = "";
 
@@ -127,7 +128,7 @@ public class SingEngine {
     }
 
     public String getVersion() {
-        return "0.1.0";
+        return "0.1.1";
     }
 
     public void setServerType(String type) {
@@ -143,6 +144,10 @@ public class SingEngine {
     public void setOpenVad(boolean b, String vadResourcename) {
         this.useVad = b;
         if (b) NativeResource.vadResourceName = vadResourcename;
+    }
+
+    public void setOpenCheckResource(boolean checkResource) {
+        this.needCheckInitResource = checkResource;
     }
 
     public void setListener(ResultListener listenner) {
@@ -167,10 +172,9 @@ public class SingEngine {
         JSONObject cfg = new JSONObject();
         JSONObject cloud = new JSONObject();
         String serverAPI = "ws://api.cloud.ssapi.cn:8080";
-
+        String testAPI = "ws://trial.cloud.ssapi.cn:8080";
         cloud.put("enable", 1)
-//                .put("server", serverAPI)
-                .put("server", "ws://120.92.133.98:8090")
+                .put("server", serverAPI)
                 .put("connectTimeout", 20)
                 .put("serverTimeout", 60);
 
@@ -288,19 +292,27 @@ public class SingEngine {
     public void stop() {
         int r;
 
+        r = recorder.stop();
+        if (r != 0) {
+            caller.onEnd(70005, "AIRecorder stop error");
+        }
+
         r = SSound.ssound_stop(engine);
         if (r != 0) {
             caller.onEnd(70002, "engine stop error");
         }
 
-        r = recorder.stop();
-        if (r != 0) {
-            caller.onEnd(70005, "AIRecorder stop error");
-        }
+
     }
 
     public void cancel() {
         int r;
+
+        r = recorder.stop();
+        if (r != 0) {
+            caller.onEnd(70005, "AIRecorder stop error");
+        }
+
         r = SSound.ssound_cancel(engine);
         if (r != 0) caller.onEnd(70003, "cancel error");
     }
@@ -322,16 +334,28 @@ public class SingEngine {
 
 
     private String buildAvdPath() throws JSONException {
-        if (avdLocalPath == null) {
+
+        if (needCheckInitResource){
             avdLocalPath = AiUtil.getFilePathFromAssets(ct, NativeResource.vadResourceName);
+        }else{
+            if (avdLocalPath == null) {
+                avdLocalPath = AiUtil.getFilePathFromAssets(ct, NativeResource.vadResourceName);
+            }
         }
+
         return avdLocalPath;
     }
 
     private JSONObject buildNativePath() throws JSONException {
-        if (local == null) {
+
+        if (needCheckInitResource){
             local = AiUtil.unzipFile(ct, NativeResource.zipResourceName).toString();
+        }else{
+            if (local == null) {
+                local = AiUtil.unzipFile(ct, NativeResource.zipResourceName).toString();
+            }
         }
+
         String res_path = String.format(NativeResource.native_zip_res_path, local, local);
         return new JSONObject(res_path);
     }

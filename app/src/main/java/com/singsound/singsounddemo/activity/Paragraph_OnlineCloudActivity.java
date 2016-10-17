@@ -152,7 +152,9 @@ public class Paragraph_OnlineCloudActivity extends BaseCloudActivity implements 
             request.put("coreType", Config.TYPE_Paragraph)
                     .put("refText", mCurrentPara)
                     .put("rank", 100)
-                    .put("precision", 0.5);
+                    .put("precision", 0.5)
+                    .put("symbol", 1);
+
             JSONObject cfg = mSingEngine.buildStartJson(request);
             mSingEngine.setStartCfg(cfg);
             mSingEngine.start();

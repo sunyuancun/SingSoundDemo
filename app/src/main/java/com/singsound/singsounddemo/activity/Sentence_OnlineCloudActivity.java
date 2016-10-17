@@ -324,6 +324,7 @@ public class Sentence_OnlineCloudActivity extends BaseCloudActivity implements V
             request.put("coreType", Config.TYPE_sent);
             request.put("refText", mCurrentSentence);
             request.put("rank", 100);
+            request.put("symbol", 1);
             //构建评测请求参数
             JSONObject startCfg = mSingEngine.buildStartJson(request);
             //设置评测请求参数

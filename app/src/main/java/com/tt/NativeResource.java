@@ -10,4 +10,9 @@ public class NativeResource {
             + "\"en.sent.score\":{\"res\": \"%s/eval/bin/eng.snt.pydnn.16bit\"}"
             + ",\"en.word.score\":{\"res\": \"%s/eval/bin/eng.wrd.pydnn.16bit\"}"
             + "}";
+
+    public static String[] native_zip_file_names =  {"comb.db","common.bin",
+            "eng.snt.pydnn.16bit.bin","eng.snt.pydnn.16bit.cfg",
+            "eng.wrd.pydnn.16bit.bin","eng.wrd.pydnn.16bit.cfg"};
+
 }

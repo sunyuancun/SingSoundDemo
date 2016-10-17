@@ -113,8 +113,6 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
         super.onDestroy();
 
         if (engine != null && initSingEngine) {
-            engine.stop();
-            engine.cancel();
             engine.delete();
             Log.e("-----------", "engine cancel  and delete");
         }

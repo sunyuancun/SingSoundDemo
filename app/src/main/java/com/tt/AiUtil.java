@@ -16,11 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class AiUtil {
     private static String TAG = "AiUtil";
+    private static int BUFFER_SIZE = 8192;
+    private static ArrayList<String> filenameList = new ArrayList<String>();
 
     /**
      * 计算字符串的SHA1值
@@ -54,20 +57,6 @@ public class AiUtil {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * 计算英文句子中，单词的个数
-     */
-    public static long getWordCount(String sent) {
-        return sent.trim().split("\\W+").length;
-    }
-
-    /**
-     * 计算中文句子中，汉字的个数
-     */
-    public static long getHanziCount(String pin1yin1) {
-        return pin1yin1.trim().split("-").length;
     }
 
     /**
@@ -185,10 +174,14 @@ public class AiUtil {
             File md5sumFile = new File(targetDir, ".md5sum");
 
             if (targetDir.isDirectory()) {
-                if (md5sumFile.isFile()) {
-                    String md5sum2 = readFile(md5sumFile);
-                    if (md5sum2.equals(md5sum)) {// already extracted
-                        return targetDir;
+                Boolean resourceIsExist = checkResourceIsExist(targetDir);
+
+                if (resourceIsExist) {
+                    if (md5sumFile.isFile()) {
+                        String md5sum2 = readFile(md5sumFile);
+                        if (md5sum2.equals(md5sum)) {// already extracted
+                            return targetDir;
+                        }
                     }
                 }
                 // remove old dirty resource
@@ -200,13 +193,10 @@ public class AiUtil {
             return targetDir;
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(tag, "Failed to find resource.zip, please check your assets", e);
+            Log.e(TAG, "Failed to find resource.zip, please check your assets", e);
         }
         return null;
     }
-
-    private static String tag = "AiUtil";
-    private static int BUFFER_SIZE = 8192;
 
     private static String bytes2hex(byte[] bytes) {
         StringBuffer sb = new StringBuffer(bytes.length * 2);
@@ -219,19 +209,6 @@ public class AiUtil {
         }
         return sb.toString();
     }
-
-//    private static void removeDirectory(File directory) {
-//        if (directory.isDirectory()) {
-//            File[] files = directory.listFiles();
-//            for (int i = 0; i < files.length; i++) {
-//                if (files[i].isDirectory()) {
-//                    removeDirectory(files[i]);
-//                }
-//                files[i].delete();
-//            }
-//            directory.delete();
-//        }
-//    }
 
     private static void removeDirectory(File directory) {
         if (directory.isDirectory()) {
@@ -294,7 +271,9 @@ public class AiUtil {
     public static String getFilePathFromAssets(Context context, String name) {
         try {
             File targetFile = new File(getFilesDir(context), name);
-            copyInputStreamToFile(context.getAssets().open(name), targetFile);
+            if (!isFileExists(targetFile)) {
+                copyInputStreamToFile(context.getAssets().open(name), targetFile);
+            }
             return targetFile.getAbsolutePath();
         } catch (Exception e) {
             Log.e(TAG, "failed to open vadbin resource from assets， please check your assets.", e);
@@ -315,5 +294,38 @@ public class AiUtil {
 
         is.close();
         fos.close();
+    }
+
+    private static boolean isFileExists(File file) {
+        return file.exists() && file.length() > 0;
+
+    }
+
+    private static void getResourceFileList(String strPath) {
+
+        File dir = new File(strPath);
+        File[] files = dir.listFiles();
+
+        if (files == null)
+            return;
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isDirectory()) {
+                getResourceFileList(files[i].getAbsolutePath());
+            } else {
+                filenameList.add(files[i].getName());
+            }
+        }
+    }
+
+    private static boolean checkResourceIsExist(File targetDir) {
+        filenameList.clear();
+        getResourceFileList(targetDir.getAbsolutePath());
+        for (int i = 0; i < NativeResource.native_zip_file_names.length; i++) {
+            if (!filenameList.contains(NativeResource.native_zip_file_names[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

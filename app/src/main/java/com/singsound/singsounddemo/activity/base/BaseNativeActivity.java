@@ -76,9 +76,11 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
                     // 2. 设置引擎类型  cloud ：云端    native： 离线     auto： 云端优先，无网络状态native
                     engine.setServerType("native");
                     // 3. 是否开启vad功能
-                    engine.setOpenVad(false,null);
+                    engine.setOpenVad(false, null);
+                    //开启离线资源检查功能  （不建议）
+                    engine.setOpenCheckResource(true);
                     // 4 构建引擎初始化参数
-                    JSONObject cfg_init = engine.buildInitJson(null,null);
+                    JSONObject cfg_init = engine.buildInitJson(null, null);
                     engine.setNewCfg(cfg_init);
                     // 5 创建 对象   回调 OnReady（）；
                     engine.newEngine();
@@ -112,8 +114,6 @@ public abstract class BaseNativeActivity extends Activity implements SingEngine.
         super.onDestroy();
 
         if (engine != null && initSingEngine) {
-            engine.stop();
-            engine.cancel();
             engine.delete();
             Log.e("-----------", "engine cancel  and delete");
         }
