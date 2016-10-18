@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 savedPosition = (int)SPUtils.get(MainActivity.this,SPUtils.SERVER_API_SELECTED_POSITION,0);
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setSingleChoiceItems(R.array.server_api, savedPosition, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         Object checkedItem = lw.getAdapter().getItem(which);
                         SPUtils.put(MainActivity.this, SPUtils.SERVER_API, checkedItem.toString());
                         SPUtils.put(MainActivity.this, SPUtils.SERVER_API_SELECTED_POSITION, which);
+                        dialog.dismiss();
                     }
                 });
                 AlertDialog dialog = builder.create();
