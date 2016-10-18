@@ -115,17 +115,17 @@ public class SingEngine {
 
     private String wavPath = "";
 
-    public static SingEngine fragment;
+    public static SingEngine mSingEngine;
 
     public SingEngine(Context context) {
         ct = context;
     }
 
     public static synchronized SingEngine newInstance(Context context) {
-        if (fragment == null) {
-            fragment = new SingEngine(context);
+        if (mSingEngine == null) {
+            mSingEngine = new SingEngine(context);
         }
-        return fragment;
+        return mSingEngine;
     }
 
     public String getVersion() {

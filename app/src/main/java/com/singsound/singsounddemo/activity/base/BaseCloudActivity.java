@@ -75,7 +75,7 @@ public abstract class BaseCloudActivity extends Activity implements SingEngine.R
                     // 3 设置引擎类型
                     engine.setServerType("auto");
                     // 4 设置是否开启VAD功能
-//                    engine.setOpenVad(false, null);
+                    // engine.setOpenVad(false, null);
                     engine.setOpenVad(true, "vad.0.1.bin");
                     //开启离线资源检查功能
                     engine.setOpenCheckResource(true);
